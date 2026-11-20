@@ -17,7 +17,7 @@ import { BRAND } from "@/lib/demo-data";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PrithviX — Predict. Prevent. Rescue. Redistribute." },
+      { title: "Prithvi Food Rescue | Save Food, Feed People" },
       {
         name: "description",
         content:
