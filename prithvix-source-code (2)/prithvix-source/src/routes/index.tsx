@@ -21,13 +21,27 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "PrithviX predicts kitchen demand, prevents over-preparation and redistributes surplus meals to verified recipients. Explore the interactive demo.",
+          "Prithvi Food Rescue predicts kitchen demand, prevents food waste, and redistributes surplus meals to verified community recipients.",
       },
-      { property: "og:title", content: "PrithviX — FoodTech sustainability platform" },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: "Prithvi Food Rescue | Save Food, Feed People" },
       {
         property: "og:description",
-        content: "Prepare what is needed. Rescue what remains. Try the end-to-end demo.",
+        content:
+          "Predict kitchen demand, prevent food waste, and redistribute surplus meals to verified community recipients with Prithvi Food Rescue.",
       },
+      { property: "og:url", content: "https://github.com/khushishukla3999-web/Prithvi-Food-Rescue" },
+      { property: "og:image", content: "/favicon.ico" },
+      { property: "og:image:alt", content: "Prithvi Food Rescue" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Prithvi Food Rescue | Save Food, Feed People" },
+      {
+        name: "twitter:description",
+        content:
+          "Predict kitchen demand, prevent food waste, and redistribute surplus meals to verified community recipients with Prithvi Food Rescue.",
+      },
+      { name: "twitter:image", content: "/favicon.ico" },
+      { name: "twitter:image:alt", content: "Prithvi Food Rescue" },
     ],
   }),
   component: Landing,
