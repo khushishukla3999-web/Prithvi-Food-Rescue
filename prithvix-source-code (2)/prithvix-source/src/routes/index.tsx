@@ -98,7 +98,7 @@ function Landing() {
 
       <section className="hero-wash border-b border-border">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
-          <div>
+          <div className="animate-fade-in">
             <DemoBadge label="Interactive prototype · Demo Data" />
             <h1 className="mt-5 font-display text-4xl font-semibold leading-[1.08] sm:text-5xl lg:text-6xl">
               Predict. Prevent.
@@ -125,7 +125,7 @@ function Landing() {
             </p>
           </div>
 
-          <Card className="self-center border-primary/15 shadow-lg">
+          <Card className="self-center border-primary/15 shadow-lg food-card-hover animate-fade-in-scale animate-delay-100">
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-semibold">Today at Sunrise Campus Kitchen</p>
@@ -138,13 +138,16 @@ function Landing() {
                   { k: "Actual served", v: "775 meals" },
                   { k: "Surplus", v: "15 meals" },
                 ].map((x) => (
-                  <div key={x.k} className="rounded-xl border border-border bg-muted/40 p-3">
+                  <div
+                    key={x.k}
+                    className="rounded-xl border border-border bg-muted/40 p-3 transition-all duration-200 ease-out hover:border-primary/30 hover:bg-muted/70 hover:scale-[1.02]"
+                  >
                     <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{x.k}</p>
                     <p className="mt-1 font-display text-xl font-semibold">{x.v}</p>
                   </div>
                 ))}
               </div>
-              <div className="rounded-xl border border-primary/20 bg-primary-soft/60 p-3">
+              <div className="rounded-xl border border-primary/20 bg-primary-soft/60 p-3 transition-all duration-200 ease-out hover:bg-primary-soft/80 hover:shadow-sm">
                 <p className="flex items-center gap-2 text-sm font-medium text-primary">
                   <Sparkles className="size-4" /> 42.5 kg of waste prevented this week
                 </p>
@@ -160,7 +163,7 @@ function Landing() {
       <section className="border-b border-border bg-card">
         <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-10 sm:px-6 lg:grid-cols-4">
           {STATS.map((s) => (
-            <div key={s.label}>
+            <div key={s.label} className="transition-transform duration-200 ease-out hover:-translate-y-0.5">
               <p className="font-display text-3xl font-semibold text-primary">{s.value}</p>
               <p className="mt-1 text-sm text-muted-foreground">{s.label}</p>
             </div>
@@ -178,10 +181,10 @@ function Landing() {
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((s, i) => (
-            <Card key={s.title} className="h-full transition-shadow hover:shadow-md">
+            <Card key={s.title} className="group h-full food-card-hover">
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="grid size-10 place-items-center rounded-xl bg-primary-soft text-primary">
+                  <span className="grid size-10 place-items-center rounded-xl bg-primary-soft text-primary transition-transform duration-200 ease-out group-hover:scale-110">
                     <s.icon className="size-5" aria-hidden="true" />
                   </span>
                   <span className="text-xs font-semibold text-muted-foreground">0{i + 1}</span>

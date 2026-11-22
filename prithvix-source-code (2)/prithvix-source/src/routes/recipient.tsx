@@ -54,7 +54,7 @@ function RecipientDashboard() {
         </CardHeader>
         <CardContent className="grid gap-4 lg:grid-cols-3">
           {NEARBY_DONATIONS.map((d) => (
-            <div key={d.id} className="flex flex-col rounded-xl border border-border p-4">
+            <div key={d.id} className="flex flex-col rounded-xl border border-border bg-card p-4 food-card-hover">
               <p className="text-sm font-semibold">{d.item}</p>
               <p className="text-xs text-muted-foreground">{d.provider}</p>
               <div className="mt-3 space-y-1.5 text-sm">
