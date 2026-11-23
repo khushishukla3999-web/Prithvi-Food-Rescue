@@ -12,7 +12,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DemoBadge, Logo } from "@/components/prithvix/brand";
-import { BRAND } from "@/lib/demo-data";
+import { BRAND, ROLES } from "@/lib/demo-data";
+import { useDemo } from "@/lib/demo-store";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -78,20 +79,33 @@ const STEPS = [
 ];
 
 function Landing() {
+  const { currentUser, role } = useDemo();
+  const currentDashboard = role ? (ROLES.find((r) => r.id === role)?.home ?? "/provider") : "/provider";
+
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <Logo />
           <div className="flex items-center gap-2">
-            <Button asChild variant="ghost" className="hidden sm:inline-flex">
-              <Link to="/login">Login</Link>
-            </Button>
-            <Button asChild>
-              <Link to="/login">
-                Get Started <ArrowRight className="size-4" />
-              </Link>
-            </Button>
+            {currentUser || role ? (
+              <Button asChild>
+                <Link to={currentDashboard}>
+                  Dashboard <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+            ) : (
+              <>
+                <Button asChild variant="ghost" className="hidden sm:inline-flex">
+                  <Link to="/login">Login</Link>
+                </Button>
+                <Button asChild>
+                  <Link to="/login">
+                    Get Started <ArrowRight className="size-4" />
+                  </Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -112,8 +126,8 @@ function Landing() {
             <p className="mt-4 font-display text-lg font-medium text-primary">“{BRAND.message}”</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg">
-                <Link to="/login">
-                  Enter the demo <ArrowRight className="size-4" />
+                <Link to={currentUser || role ? currentDashboard : "/login"}>
+                  {currentUser || role ? "Go to Dashboard" : "Enter the demo"} <ArrowRight className="size-4" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline">
@@ -121,7 +135,7 @@ function Landing() {
               </Button>
             </div>
             <p className="mt-4 text-xs text-muted-foreground">
-              No signup, no external services. Every figure shown is seeded demo data.
+              Sign up or test with one-click demo accounts. All operations are safe and client-side.
             </p>
           </div>
 

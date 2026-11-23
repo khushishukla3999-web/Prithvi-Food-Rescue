@@ -15,6 +15,7 @@ import {
   HeartHandshake,
   ArrowRightLeft,
 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -97,7 +98,7 @@ function NavList({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
 }
 
 function SidebarBody({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
-  const { roleMeta } = useDemo();
+  const { roleMeta, currentUser } = useDemo();
   return (
     <div className="flex h-full flex-col gap-6 p-4">
       <Link to="/" className="px-1 text-sidebar-foreground" onClick={onNavigate}>
@@ -106,7 +107,7 @@ function SidebarBody({ onNavigate }: { onNavigate?: (() => void) | undefined }) 
       <NavList onNavigate={onNavigate} />
       <div className="mt-auto rounded-xl border border-sidebar-border bg-sidebar-accent/60 p-3">
         <p className="text-xs font-semibold text-sidebar-accent-foreground">
-          {roleMeta?.org ?? "Demo workspace"}
+          {currentUser?.org ?? roleMeta?.org ?? "Demo workspace"}
         </p>
         <p className="mt-1 text-[11px] leading-relaxed text-sidebar-foreground/70">
           Prepare what is needed. Rescue what remains.
@@ -127,7 +128,7 @@ export function AppShell({
   actions?: React.ReactNode;
   children: React.ReactNode;
 }) {
-  const { role, roleMeta, setRole } = useDemo();
+  const { role, roleMeta, setRole, currentUser, logout } = useDemo();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = React.useState(false);
@@ -195,20 +196,27 @@ export function AppShell({
               <Button
                 variant="ghost"
                 size="icon"
-                aria-label="Exit demo"
+                aria-label="Log out"
                 onClick={() => {
-                  setRole(null);
-                  navigate({ to: "/" });
+                  logout();
+                  toast.success("Logged out successfully");
+                  navigate({ to: "/login" });
                 }}
               >
                 <LogOut className="size-4" />
               </Button>
             </div>
           </div>
-          {roleMeta && (
+          {(currentUser || roleMeta) && (
             <div className="border-t border-border/70 bg-muted/40 px-4 py-1.5 text-[11px] text-muted-foreground sm:px-6">
-              Signed in as <span className="font-semibold text-foreground">{roleMeta.demoUser}</span> ·{" "}
-              {roleMeta.org} · demo session, no real account
+              Signed in as{" "}
+              <span className="font-semibold text-foreground">
+                {currentUser?.name ?? roleMeta?.demoUser}
+              </span>{" "}
+              · {currentUser?.org ?? roleMeta?.org}
+              {currentUser?.email && (
+                <span className="hidden text-muted-foreground/80 sm:inline"> ({currentUser.email})</span>
+              )}
             </div>
           )}
         </header>
