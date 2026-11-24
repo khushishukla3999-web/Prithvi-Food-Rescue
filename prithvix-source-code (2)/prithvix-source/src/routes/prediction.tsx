@@ -33,7 +33,8 @@ export const Route = createFileRoute("/prediction")({
       { property: "og:title", content: "Demand Prediction — PrithviX" },
       {
         property: "og:description",
-        content: "Editable inputs, instant recalculated forecast — all computed locally as demo data.",
+        content:
+          "Editable inputs, instant recalculated forecast — all computed locally as demo data.",
       },
     ],
   }),
@@ -64,7 +65,9 @@ function PredictionPage() {
     window.setTimeout(() => {
       recalculate(form);
       setBusy(false);
-      toast.success("Prediction recalculated", { description: "Demo model re-run with your inputs." });
+      toast.success("Prediction recalculated", {
+        description: "Demo model re-run with your inputs.",
+      });
     }, 650);
   }
 
@@ -87,7 +90,9 @@ function PredictionPage() {
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="border-primary/25 bg-primary-soft/40">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Predicted demand</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Predicted demand
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="font-display text-4xl font-semibold">{prediction.predicted}</p>
@@ -101,7 +106,9 @@ function PredictionPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="font-display text-4xl font-semibold text-primary">{prediction.recommended}</p>
+            <p className="font-display text-4xl font-semibold text-primary">
+              {prediction.recommended}
+            </p>
             <p className="mt-1 text-sm text-muted-foreground">
               {prediction.predicted - prediction.recommended} meals trimmed to limit leftovers
             </p>
@@ -204,8 +211,8 @@ function PredictionPage() {
             </div>
 
             <div className="rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
-              Historic consumption for this kitchen (last 30 services) is always included as a baseline
-              factor in the demo calculation.
+              Historic consumption for this kitchen (last 30 services) is always included as a
+              baseline factor in the demo calculation.
             </div>
 
             <Button className="w-full" onClick={run} disabled={busy}>

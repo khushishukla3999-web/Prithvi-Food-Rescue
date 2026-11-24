@@ -14,7 +14,6 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { DemoProvider } from "../lib/demo-store";
 import { Toaster } from "../components/ui/sonner";
 
-
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -90,7 +89,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "PrithviX — Predict. Prevent. Rescue. Redistribute." },
       {
         property: "og:description",
-        content: "Prepare what is needed. Rescue what remains. A FoodTech sustainability prototype.",
+        content:
+          "Prepare what is needed. Rescue what remains. A FoodTech sustainability prototype.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -139,4 +139,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-

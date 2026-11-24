@@ -29,14 +29,25 @@ export function RouteMap({
   return (
     <div className={cn("overflow-hidden rounded-xl border border-border bg-card", className)}>
       <div className="relative surface-grid bg-secondary/40">
-        <svg viewBox="0 0 400 220" className="h-56 w-full sm:h-64" role="img" aria-label={`Illustrative route from ${from} to ${to}`}>
+        <svg
+          viewBox="0 0 400 220"
+          className="h-56 w-full sm:h-64"
+          role="img"
+          aria-label={`Illustrative route from ${from} to ${to}`}
+        >
           <path d="M0 160 H400" stroke="var(--color-border)" strokeWidth="10" opacity="0.5" />
           <path d="M240 0 V220" stroke="var(--color-border)" strokeWidth="8" opacity="0.5" />
           <path d="M0 60 H400" stroke="var(--color-border)" strokeWidth="6" opacity="0.35" />
           <circle cx="80" cy="60" r="26" fill="var(--color-primary-soft)" opacity="0.7" />
           <circle cx="320" cy="170" r="34" fill="var(--color-accent)" opacity="0.6" />
 
-          <path d={path} stroke="var(--color-border)" strokeWidth="6" fill="none" strokeLinecap="round" />
+          <path
+            d={path}
+            stroke="var(--color-border)"
+            strokeWidth="6"
+            fill="none"
+            strokeLinecap="round"
+          />
           <path
             d={path}
             stroke="var(--color-primary)"
@@ -50,11 +61,27 @@ export function RouteMap({
 
           <g>
             <circle cx="40" cy="190" r="9" fill="var(--color-primary)" />
-            <circle cx="40" cy="190" r="15" fill="none" stroke="var(--color-primary)" strokeWidth="2" opacity="0.35" />
+            <circle
+              cx="40"
+              cy="190"
+              r="15"
+              fill="none"
+              stroke="var(--color-primary)"
+              strokeWidth="2"
+              opacity="0.35"
+            />
           </g>
           <g>
             <circle cx="360" cy="46" r="9" fill="var(--color-harvest)" />
-            <circle cx="360" cy="46" r="15" fill="none" stroke="var(--color-harvest)" strokeWidth="2" opacity="0.4" />
+            <circle
+              cx="360"
+              cy="46"
+              r="15"
+              fill="none"
+              stroke="var(--color-harvest)"
+              strokeWidth="2"
+              opacity="0.4"
+            />
           </g>
         </svg>
 
@@ -62,7 +89,9 @@ export function RouteMap({
           <span className="rounded-full bg-card/95 px-2.5 py-1 font-medium shadow-sm">
             {distanceKm} km road distance
           </span>
-          <span className="rounded-full bg-card/95 px-2.5 py-1 font-medium shadow-sm">ETA {etaMin} min</span>
+          <span className="rounded-full bg-card/95 px-2.5 py-1 font-medium shadow-sm">
+            ETA {etaMin} min
+          </span>
           <span className="rounded-full bg-card/95 px-2.5 py-1 font-medium shadow-sm">
             Illustrative route · not a live map
           </span>

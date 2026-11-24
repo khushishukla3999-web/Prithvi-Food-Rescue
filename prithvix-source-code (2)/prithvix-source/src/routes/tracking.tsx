@@ -55,9 +55,17 @@ function TrackingPage() {
       }
     >
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Food quantity" value={`${surplus?.quantityKg ?? 18} kg`} hint={`≈ ${surplus?.meals ?? 72} meals`} />
+        <StatCard
+          label="Food quantity"
+          value={`${surplus?.quantityKg ?? 18} kg`}
+          hint={`≈ ${surplus?.meals ?? 72} meals`}
+        />
         <StatCard label="Recipient" value={recipient.org} hint={recipient.type} tone="leaf" />
-        <StatCard label="Distance" value={`${recipient.distanceKm} km`} hint="Illustrative road distance" />
+        <StatCard
+          label="Distance"
+          value={`${recipient.distanceKm} km`}
+          hint="Illustrative road distance"
+        />
         <StatCard
           label={delivered ? "Completed in" : "ETA"}
           value={delivered ? `${recipient.etaMin} min` : `${etaLeft} min`}

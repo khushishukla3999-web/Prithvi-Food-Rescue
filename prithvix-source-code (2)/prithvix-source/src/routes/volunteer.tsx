@@ -37,7 +37,12 @@ function VolunteerDashboard() {
   return (
     <AppShell title="Volunteer Dashboard" subtitle="Kabir Shah · PrithviX Rescue Fleet">
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Assignments today" value={VOLUNTEER_ASSIGNMENTS.length} hint="1 in progress" tone="leaf" />
+        <StatCard
+          label="Assignments today"
+          value={VOLUNTEER_ASSIGNMENTS.length}
+          hint="1 in progress"
+          tone="leaf"
+        />
         <StatCard label="Distance to cover" value="10.7 km" hint="Across all runs" tone="cool" />
         <StatCard label="Food moved" value="53 kg" hint="≈ 212 meals" tone="harvest" />
         <StatCard label="On-time rate" value="96%" hint="Demo Data" />
@@ -56,7 +61,9 @@ function VolunteerDashboard() {
                 type="button"
                 onClick={() => setActiveId(a.id)}
                 className={`w-full rounded-xl border p-4 text-left transition-colors ${
-                  a.id === activeId ? "border-primary bg-primary-soft/40" : "border-border hover:bg-muted/50"
+                  a.id === activeId
+                    ? "border-primary bg-primary-soft/40"
+                    : "border-border hover:bg-muted/50"
                 }`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -73,7 +80,8 @@ function VolunteerDashboard() {
                     <MapPin className="size-3.5" aria-hidden="true" /> {a.distanceKm} km
                   </span>
                   <span className="inline-flex items-center gap-1">
-                    <Clock className="size-3.5" aria-hidden="true" /> {a.window} · ETA {a.etaMin} min
+                    <Clock className="size-3.5" aria-hidden="true" /> {a.window} · ETA {a.etaMin}{" "}
+                    min
                   </span>
                 </div>
               </button>
@@ -87,7 +95,9 @@ function VolunteerDashboard() {
             to={active.drop}
             distanceKm={active.distanceKm}
             etaMin={active.etaMin}
-            progress={active.status === "Completed" ? 1 : active.status === "In progress" ? 0.55 : 0.05}
+            progress={
+              active.status === "Completed" ? 1 : active.status === "In progress" ? 0.55 : 0.05
+            }
             legs={active.legs}
           />
           <Card>

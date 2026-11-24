@@ -169,8 +169,16 @@ export const RECIPIENTS: Recipient[] = [
 export const RECENT_ACTIVITY = [
   { time: "12 min ago", text: "Surplus of 15 meals recorded after lunch service", tone: "info" },
   { time: "48 min ago", text: "Annapurna Seva Trust confirmed pickup of 18 kg", tone: "good" },
-  { time: "2 h ago", text: "Preparation recommendation lowered by 30 meals for Sunday", tone: "info" },
-  { time: "Yesterday", text: "Sahara Night Shelter received 22 kg — 88 meals served", tone: "good" },
+  {
+    time: "2 h ago",
+    text: "Preparation recommendation lowered by 30 meals for Sunday",
+    tone: "info",
+  },
+  {
+    time: "Yesterday",
+    text: "Sahara Night Shelter received 22 kg — 88 meals served",
+    tone: "good",
+  },
   { time: "2 days ago", text: "Waste prevented crossed 1,200 kg for this kitchen", tone: "good" },
 ];
 
@@ -205,14 +213,49 @@ export const NEARBY_DONATIONS = [
 ];
 
 export const RECIPIENT_REQUESTS = [
-  { id: "q1", item: "Veg biryani", qtyKg: 22, provider: "Green Leaf Caterers", status: "In transit", eta: "16 min" },
-  { id: "q2", item: "Khichdi", qtyKg: 12, provider: "Sunrise Campus Kitchen", status: "Pickup requested", eta: "34 min" },
+  {
+    id: "q1",
+    item: "Veg biryani",
+    qtyKg: 22,
+    provider: "Green Leaf Caterers",
+    status: "In transit",
+    eta: "16 min",
+  },
+  {
+    id: "q2",
+    item: "Khichdi",
+    qtyKg: 12,
+    provider: "Sunrise Campus Kitchen",
+    status: "Pickup requested",
+    eta: "34 min",
+  },
 ];
 
 export const RECIPIENT_COMPLETED = [
-  { id: "c1", date: "30 Aug", item: "Mixed thali", qtyKg: 24, meals: 96, provider: "Sunrise Campus Kitchen" },
-  { id: "c2", date: "29 Aug", item: "Vegetable curry", qtyKg: 17, meals: 68, provider: "Metro Tech Park Cafeteria" },
-  { id: "c3", date: "27 Aug", item: "Rice & sambar", qtyKg: 31, meals: 124, provider: "Hotel Vaishnavi Banquets" },
+  {
+    id: "c1",
+    date: "30 Aug",
+    item: "Mixed thali",
+    qtyKg: 24,
+    meals: 96,
+    provider: "Sunrise Campus Kitchen",
+  },
+  {
+    id: "c2",
+    date: "29 Aug",
+    item: "Vegetable curry",
+    qtyKg: 17,
+    meals: 68,
+    provider: "Metro Tech Park Cafeteria",
+  },
+  {
+    id: "c3",
+    date: "27 Aug",
+    item: "Rice & sambar",
+    qtyKg: 31,
+    meals: 124,
+    provider: "Hotel Vaishnavi Banquets",
+  },
 ];
 
 export const VOLUNTEER_ASSIGNMENTS = [
@@ -261,12 +304,54 @@ export const ADMIN_STATS = [
 ];
 
 export const ADMIN_USERS = [
-  { id: "u1", name: "Sunrise Campus Kitchen", role: "Provider", city: "Pune", status: "Verified", joined: "12 Mar 2024" },
-  { id: "u2", name: "Annapurna Seva Trust", role: "Recipient", city: "Pune", status: "Verified", joined: "04 Mar 2024" },
-  { id: "u3", name: "Roti Bank Collective", role: "Recipient", city: "Pune", status: "Pending", joined: "22 Aug 2026" },
-  { id: "u4", name: "Kabir Shah", role: "Volunteer", city: "Pune", status: "Verified", joined: "18 Jan 2025" },
-  { id: "u5", name: "Metro Tech Park Cafeteria", role: "Provider", city: "Pune", status: "Pending", joined: "27 Aug 2026" },
-  { id: "u6", name: "Bal Asha Children's Home", role: "Recipient", city: "Pune", status: "Suspended", joined: "09 Nov 2024" },
+  {
+    id: "u1",
+    name: "Sunrise Campus Kitchen",
+    role: "Provider",
+    city: "Pune",
+    status: "Verified",
+    joined: "12 Mar 2024",
+  },
+  {
+    id: "u2",
+    name: "Annapurna Seva Trust",
+    role: "Recipient",
+    city: "Pune",
+    status: "Verified",
+    joined: "04 Mar 2024",
+  },
+  {
+    id: "u3",
+    name: "Roti Bank Collective",
+    role: "Recipient",
+    city: "Pune",
+    status: "Pending",
+    joined: "22 Aug 2026",
+  },
+  {
+    id: "u4",
+    name: "Kabir Shah",
+    role: "Volunteer",
+    city: "Pune",
+    status: "Verified",
+    joined: "18 Jan 2025",
+  },
+  {
+    id: "u5",
+    name: "Metro Tech Park Cafeteria",
+    role: "Provider",
+    city: "Pune",
+    status: "Pending",
+    joined: "27 Aug 2026",
+  },
+  {
+    id: "u6",
+    name: "Bal Asha Children's Home",
+    role: "Recipient",
+    city: "Pune",
+    status: "Suspended",
+    joined: "09 Nov 2024",
+  },
 ];
 
 export const MENU_OPTIONS = [
@@ -277,9 +362,25 @@ export const MENU_OPTIONS = [
 ];
 
 export const TRACKING_STEPS = [
-  { key: "reported", label: "Surplus Reported", detail: "Provider logged surplus with handling details." },
-  { key: "matched", label: "Recipient Matched", detail: "Best-fit verified recipient selected by match score." },
-  { key: "requested", label: "Pickup Requested", detail: "Recipient accepted; volunteer assigned." },
-  { key: "progress", label: "Pickup In Progress", detail: "Volunteer en route with insulated carrier." },
+  {
+    key: "reported",
+    label: "Surplus Reported",
+    detail: "Provider logged surplus with handling details.",
+  },
+  {
+    key: "matched",
+    label: "Recipient Matched",
+    detail: "Best-fit verified recipient selected by match score.",
+  },
+  {
+    key: "requested",
+    label: "Pickup Requested",
+    detail: "Recipient accepted; volunteer assigned.",
+  },
+  {
+    key: "progress",
+    label: "Pickup In Progress",
+    detail: "Volunteer en route with insulated carrier.",
+  },
   { key: "delivered", label: "Delivered", detail: "Handover confirmed and meals logged." },
 ];

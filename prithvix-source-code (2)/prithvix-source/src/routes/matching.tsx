@@ -83,7 +83,9 @@ function MatchingPage() {
             return (
               <Card
                 key={r.id}
-                className={selected ? "border-primary shadow-md" : "transition-shadow hover:shadow-md"}
+                className={
+                  selected ? "border-primary shadow-md" : "transition-shadow hover:shadow-md"
+                }
               >
                 <CardContent className="grid gap-4 md:grid-cols-[1fr_200px]">
                   <div>
@@ -91,7 +93,9 @@ function MatchingPage() {
                       {i === 0 && !matchedRecipient && (
                         <Badge className="bg-primary text-primary-foreground">Best match</Badge>
                       )}
-                      {selected && <Badge className="bg-success text-success-foreground">Selected</Badge>}
+                      {selected && (
+                        <Badge className="bg-success text-success-foreground">Selected</Badge>
+                      )}
                       <h2 className="text-lg font-semibold">{r.org}</h2>
                       <span className="inline-flex items-center gap-1 text-xs text-success">
                         <BadgeCheck className="size-3.5" aria-hidden="true" /> Verified (demo) ·{" "}
@@ -130,7 +134,9 @@ function MatchingPage() {
                       <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
                         Match score
                       </p>
-                      <p className="font-display text-3xl font-semibold text-primary">{r.matchScore}%</p>
+                      <p className="font-display text-3xl font-semibold text-primary">
+                        {r.matchScore}%
+                      </p>
                     </div>
                     <div className="space-y-2">
                       <ScoreBar label="Distance" value={distanceScore} />
@@ -179,8 +185,9 @@ function MatchingPage() {
             <CardContent className="space-y-2 text-sm text-muted-foreground">
               <p className="font-medium text-foreground">Why this order?</p>
               <p>
-                Recipients within 8 km are ranked by weighted score. Availability windows and cold-chain
-                capacity break ties. Verification status here is illustrative demo data, not a live check.
+                Recipients within 8 km are ranked by weighted score. Availability windows and
+                cold-chain capacity break ties. Verification status here is illustrative demo data,
+                not a live check.
               </p>
             </CardContent>
           </Card>

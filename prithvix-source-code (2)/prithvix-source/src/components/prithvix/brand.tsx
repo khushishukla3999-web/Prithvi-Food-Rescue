@@ -10,7 +10,11 @@ export function Logo({ className, mark = false }: { className?: string; mark?: b
             fill="currentColor"
             opacity="0.9"
           />
-          <path d="M12 21C7.5 20 4 16 4 10.5 8.5 11.5 12 15 12 21Z" fill="currentColor" opacity="0.55" />
+          <path
+            d="M12 21C7.5 20 4 16 4 10.5 8.5 11.5 12 15 12 21Z"
+            fill="currentColor"
+            opacity="0.55"
+          />
           <circle cx="12" cy="5" r="2.5" fill="currentColor" />
         </svg>
       </span>
@@ -23,7 +27,13 @@ export function Logo({ className, mark = false }: { className?: string; mark?: b
   );
 }
 
-export function DemoBadge({ label = "Demo Data", className }: { label?: string; className?: string }) {
+export function DemoBadge({
+  label = "Demo Data",
+  className,
+}: {
+  label?: string;
+  className?: string;
+}) {
   return (
     <span
       className={cn(

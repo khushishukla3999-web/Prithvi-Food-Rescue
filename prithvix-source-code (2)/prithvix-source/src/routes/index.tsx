@@ -31,7 +31,10 @@ export const Route = createFileRoute("/")({
         content:
           "Predict kitchen demand, prevent food waste, and redistribute surplus meals to verified community recipients with Prithvi Food Rescue.",
       },
-      { property: "og:url", content: "https://github.com/khushishukla3999-web/Prithvi-Food-Rescue" },
+      {
+        property: "og:url",
+        content: "https://github.com/khushishukla3999-web/Prithvi-Food-Rescue",
+      },
       { property: "og:image", content: "/favicon.ico" },
       { property: "og:image:alt", content: "Prithvi Food Rescue" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -80,7 +83,9 @@ const STEPS = [
 
 function Landing() {
   const { currentUser, role } = useDemo();
-  const currentDashboard = role ? (ROLES.find((r) => r.id === role)?.home ?? "/provider") : "/provider";
+  const currentDashboard = role
+    ? (ROLES.find((r) => r.id === role)?.home ?? "/provider")
+    : "/provider";
 
   return (
     <div className="min-h-screen bg-background">
@@ -120,14 +125,15 @@ function Landing() {
               Rescue. <span className="text-leaf">Redistribute.</span>
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              {BRAND.name} helps campus kitchens, canteens and caterers cook closer to real demand — and
-              moves every surplus tray to a verified community kitchen before it spoils.
+              {BRAND.name} helps campus kitchens, canteens and caterers cook closer to real demand —
+              and moves every surplus tray to a verified community kitchen before it spoils.
             </p>
             <p className="mt-4 font-display text-lg font-medium text-primary">“{BRAND.message}”</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg">
                 <Link to={currentUser || role ? currentDashboard : "/login"}>
-                  {currentUser || role ? "Go to Dashboard" : "Enter the demo"} <ArrowRight className="size-4" />
+                  {currentUser || role ? "Go to Dashboard" : "Enter the demo"}{" "}
+                  <ArrowRight className="size-4" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline">
@@ -156,7 +162,9 @@ function Landing() {
                     key={x.k}
                     className="rounded-xl border border-border bg-muted/40 p-3 transition-all duration-200 ease-out hover:border-primary/30 hover:bg-muted/70 hover:scale-[1.02]"
                   >
-                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{x.k}</p>
+                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                      {x.k}
+                    </p>
                     <p className="mt-1 font-display text-xl font-semibold">{x.v}</p>
                   </div>
                 ))}
@@ -177,7 +185,10 @@ function Landing() {
       <section className="border-b border-border bg-card">
         <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-10 sm:px-6 lg:grid-cols-4">
           {STATS.map((s) => (
-            <div key={s.label} className="transition-transform duration-200 ease-out hover:-translate-y-0.5">
+            <div
+              key={s.label}
+              className="transition-transform duration-200 ease-out hover:-translate-y-0.5"
+            >
               <p className="font-display text-3xl font-semibold text-primary">{s.value}</p>
               <p className="mt-1 text-sm text-muted-foreground">{s.label}</p>
             </div>
@@ -191,7 +202,8 @@ function Landing() {
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <h2 className="font-display text-3xl font-semibold">How PrithviX works</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          One continuous loop: forecast demand before service, then rescue whatever remains after it.
+          One continuous loop: forecast demand before service, then rescue whatever remains after
+          it.
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((s, i) => (
@@ -218,8 +230,9 @@ function Landing() {
               Walk the full rescue journey
             </h2>
             <p className="mt-2 max-w-xl text-muted-foreground">
-              Dashboard → Demand Prediction → Preparation Recommendation → Surplus → Matching → Tracking →
-              Impact. Switch between provider, recipient, volunteer and admin views at any time.
+              Dashboard → Demand Prediction → Preparation Recommendation → Surplus → Matching →
+              Tracking → Impact. Switch between provider, recipient, volunteer and admin views at
+              any time.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">

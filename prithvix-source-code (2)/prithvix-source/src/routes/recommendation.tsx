@@ -29,7 +29,8 @@ export const Route = createFileRoute("/recommendation")({
 
 function RecommendationPage() {
   const { prediction } = useDemo();
-  const menuLabel = MENU_OPTIONS.find((m) => m.id === prediction.menu)?.label ?? "Standard veg thali";
+  const menuLabel =
+    MENU_OPTIONS.find((m) => m.id === prediction.menu)?.label ?? "Standard veg thali";
 
   const factors = [
     { label: "Expected attendance", value: `${prediction.attendance} people`, weight: 38 },
@@ -69,10 +70,10 @@ function RecommendationPage() {
             </p>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
               Against a predicted demand of {prediction.predicted} meals, the recommendation trims{" "}
-              {prediction.predicted - prediction.recommended} meals. It weighs expected attendance, the
-              planned menu, this kitchen's consumption history, the day of the week and any events or
-              holidays. The goal is a surplus small enough to rescue safely — never a shortfall you cannot
-              serve.
+              {prediction.predicted - prediction.recommended} meals. It weighs expected attendance,
+              the planned menu, this kitchen's consumption history, the day of the week and any
+              events or holidays. The goal is a surplus small enough to rescue safely — never a
+              shortfall you cannot serve.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               <Button asChild>
@@ -92,7 +93,8 @@ function RecommendationPage() {
             <Progress value={prediction.confidence} className="mt-3" />
             <p className="mt-3 flex gap-2 text-xs leading-relaxed text-muted-foreground">
               <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-              Prototype figure produced by a local rule-based calculation. No trained model, no live data.
+              Prototype figure produced by a local rule-based calculation. No trained model, no live
+              data.
             </p>
           </div>
         </CardContent>
@@ -126,12 +128,21 @@ function RecommendationPage() {
           <CardContent className="space-y-3 text-sm">
             {[
               ["Total to prepare", `${prediction.recommended} meals`],
-              ["Batch in two rounds", `${Math.round(prediction.recommended * 0.7)} + ${prediction.recommended - Math.round(prediction.recommended * 0.7)}`],
-              ["Hold back buffer", `${Math.round(prediction.recommended * 0.05)} meals of quick-cook items`],
+              [
+                "Batch in two rounds",
+                `${Math.round(prediction.recommended * 0.7)} + ${prediction.recommended - Math.round(prediction.recommended * 0.7)}`,
+              ],
+              [
+                "Hold back buffer",
+                `${Math.round(prediction.recommended * 0.05)} meals of quick-cook items`,
+              ],
               ["Expected surplus band", "10 – 25 meals"],
               ["Rescue window", "Within 4 hours of preparation"],
             ].map(([k, v]) => (
-              <div key={k} className="flex items-center justify-between gap-3 border-b border-border pb-2 last:border-0">
+              <div
+                key={k}
+                className="flex items-center justify-between gap-3 border-b border-border pb-2 last:border-0"
+              >
                 <span className="text-muted-foreground">{k}</span>
                 <span className="font-medium">{v}</span>
               </div>

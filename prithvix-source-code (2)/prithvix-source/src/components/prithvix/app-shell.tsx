@@ -158,7 +158,12 @@ export function AppShell({
           <div className="flex flex-wrap items-center gap-3 px-4 py-3 sm:px-6">
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="lg:hidden" aria-label="Open navigation">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="lg:hidden"
+                  aria-label="Open navigation"
+                >
                   <Menu className="size-4" />
                 </Button>
               </SheetTrigger>
@@ -215,13 +220,18 @@ export function AppShell({
               </span>{" "}
               · {currentUser?.org ?? roleMeta?.org}
               {currentUser?.email && (
-                <span className="hidden text-muted-foreground/80 sm:inline"> ({currentUser.email})</span>
+                <span className="hidden text-muted-foreground/80 sm:inline">
+                  {" "}
+                  ({currentUser.email})
+                </span>
               )}
             </div>
           )}
         </header>
 
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8">{children}</main>
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+          {children}
+        </main>
       </div>
     </div>
   );

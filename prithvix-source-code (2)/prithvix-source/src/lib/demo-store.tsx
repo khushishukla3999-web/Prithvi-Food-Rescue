@@ -231,7 +231,9 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
         };
         try {
           window.localStorage.setItem("prithvix-current-user", JSON.stringify(nextUser));
-        } catch {}
+        } catch (_e) {
+          // ignore storage error
+        }
         return nextUser;
       });
     } else {
@@ -256,7 +258,9 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     try {
       window.localStorage.setItem("prithvix-role", targetRole);
       window.localStorage.setItem("prithvix-current-user", JSON.stringify(user));
-    } catch {}
+    } catch (_e) {
+      // ignore storage error
+    }
   }, []);
 
   const login = React.useCallback(
@@ -269,11 +273,15 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
       }
 
       // Check default demo users
-      const demoMatch = (Object.values(DEFAULT_DEMO_USERS) as (AuthUser & { password: string })[]).find(
-        (u) => u.email.toLowerCase() === cleanEmail,
-      );
+      const demoMatch = (
+        Object.values(DEFAULT_DEMO_USERS) as (AuthUser & { password: string })[]
+      ).find((u) => u.email.toLowerCase() === cleanEmail);
       if (demoMatch) {
-        if (cleanPass === demoMatch.password || cleanPass === "demo123" || cleanPass === "password123") {
+        if (
+          cleanPass === demoMatch.password ||
+          cleanPass === "demo123" ||
+          cleanPass === "password123"
+        ) {
           const user: AuthUser = {
             id: demoMatch.id,
             name: demoMatch.name,
@@ -287,7 +295,9 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
           try {
             window.localStorage.setItem("prithvix-role", user.role);
             window.localStorage.setItem("prithvix-current-user", JSON.stringify(user));
-          } catch {}
+          } catch (_e) {
+            // ignore storage error
+          }
           return { success: true, user };
         }
         return { success: false, error: "Incorrect password for demo user. Hint: password123" };
@@ -296,7 +306,9 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
       // Check registered users in localStorage
       try {
         const storedUsersRaw = window.localStorage.getItem("prithvix-registered-users");
-        const storedUsers = storedUsersRaw ? (JSON.parse(storedUsersRaw) as (AuthUser & { password: string })[]) : [];
+        const storedUsers = storedUsersRaw
+          ? (JSON.parse(storedUsersRaw) as (AuthUser & { password: string })[])
+          : [];
         const match = storedUsers.find((u) => u.email.toLowerCase() === cleanEmail);
         if (match) {
           if (match.password === cleanPass) {
@@ -322,7 +334,8 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
 
       return {
         success: false,
-        error: "No account found with this email. Please check your credentials or create a new account.",
+        error:
+          "No account found with this email. Please check your credentials or create a new account.",
       };
     },
     [],
@@ -352,12 +365,17 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
         (u) => u.email.toLowerCase() === cleanEmail,
       );
       if (demoExists) {
-        return { success: false, error: "An account with this email already exists. Try logging in." };
+        return {
+          success: false,
+          error: "An account with this email already exists. Try logging in.",
+        };
       }
 
       try {
         const storedUsersRaw = window.localStorage.getItem("prithvix-registered-users");
-        const storedUsers = storedUsersRaw ? (JSON.parse(storedUsersRaw) as (AuthUser & { password: string })[]) : [];
+        const storedUsers = storedUsersRaw
+          ? (JSON.parse(storedUsersRaw) as (AuthUser & { password: string })[])
+          : [];
         if (storedUsers.some((u) => u.email.toLowerCase() === cleanEmail)) {
           return { success: false, error: "An account with this email is already registered." };
         }
@@ -404,7 +422,9 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     try {
       window.localStorage.removeItem("prithvix-role");
       window.localStorage.removeItem("prithvix-current-user");
-    } catch {}
+    } catch (_e) {
+      // ignore storage error
+    }
   }, []);
 
   const value: Ctx = {

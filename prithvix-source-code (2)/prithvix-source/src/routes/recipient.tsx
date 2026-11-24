@@ -41,10 +41,25 @@ function RecipientDashboard() {
   return (
     <AppShell title="Recipient Dashboard" subtitle="Annapurna Seva Trust · community kitchen">
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Available nearby" value={NEARBY_DONATIONS.length} hint="Within 8 km right now" tone="leaf" />
-        <StatCard label="Active requests" value={RECIPIENT_REQUESTS.length} hint="Awaiting pickup or in transit" tone="harvest" />
+        <StatCard
+          label="Available nearby"
+          value={NEARBY_DONATIONS.length}
+          hint="Within 8 km right now"
+          tone="leaf"
+        />
+        <StatCard
+          label="Active requests"
+          value={RECIPIENT_REQUESTS.length}
+          hint="Awaiting pickup or in transit"
+          tone="harvest"
+        />
         <StatCard label="Meals distributed" value="288" hint="Last 7 days" />
-        <StatCard label="Storage capacity free" value="20 kg" hint="Hot holding + chilled" tone="cool" />
+        <StatCard
+          label="Storage capacity free"
+          value="20 kg"
+          hint="Hot holding + chilled"
+          tone="cool"
+        />
       </div>
 
       <Card className="mt-6">
@@ -54,19 +69,24 @@ function RecipientDashboard() {
         </CardHeader>
         <CardContent className="grid gap-4 lg:grid-cols-3">
           {NEARBY_DONATIONS.map((d) => (
-            <div key={d.id} className="flex flex-col rounded-xl border border-border bg-card p-4 food-card-hover">
+            <div
+              key={d.id}
+              className="flex flex-col rounded-xl border border-border bg-card p-4 food-card-hover"
+            >
               <p className="text-sm font-semibold">{d.item}</p>
               <p className="text-xs text-muted-foreground">{d.provider}</p>
               <div className="mt-3 space-y-1.5 text-sm">
                 <p className="flex items-center gap-2">
-                  <PackageCheck className="size-4 text-primary" aria-hidden="true" /> {d.qtyKg} kg · ≈{" "}
-                  {d.qtyKg * 4} meals
+                  <PackageCheck className="size-4 text-primary" aria-hidden="true" /> {d.qtyKg} kg ·
+                  ≈ {d.qtyKg * 4} meals
                 </p>
                 <p className="flex items-center gap-2">
-                  <Clock className="size-4 text-harvest" aria-hidden="true" /> Collect by {d.deadline}
+                  <Clock className="size-4 text-harvest" aria-hidden="true" /> Collect by{" "}
+                  {d.deadline}
                 </p>
                 <p className="flex items-center gap-2">
-                  <MapPin className="size-4 text-sky-cool" aria-hidden="true" /> {d.distanceKm} km away
+                  <MapPin className="size-4 text-sky-cool" aria-hidden="true" /> {d.distanceKm} km
+                  away
                 </p>
               </div>
               <p className="mt-2 text-xs text-muted-foreground">{d.storage}</p>
@@ -117,7 +137,11 @@ function RecipientDashboard() {
                 ))}
               </TableBody>
             </Table>
-            <Button variant="outline" className="mt-4 w-full" onClick={() => navigate({ to: "/tracking" })}>
+            <Button
+              variant="outline"
+              className="mt-4 w-full"
+              onClick={() => navigate({ to: "/tracking" })}
+            >
               Open tracking
             </Button>
           </CardContent>

@@ -52,17 +52,48 @@ function AdminDashboard() {
 
   function setStatus(id: string, status: string) {
     setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, status } : u)));
-    toast.success(`Status updated to ${status}`, { description: "Demo action — nothing is verified live." });
+    toast.success(`Status updated to ${status}`, {
+      description: "Demo action — nothing is verified live.",
+    });
   }
 
   return (
     <AppShell title="Admin Dashboard" subtitle="PrithviX Network Ops · Pune region">
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <StatCard label="Registered providers" value="148" hint="+6 this month" icon={Building2} tone="cool" />
-        <StatCard label="Verified recipients" value="96" hint={`${pending} pending verification`} icon={BadgeCheck} tone="leaf" />
-        <StatCard label="Active redistributions" value="12" hint="Across 4 zones" icon={Truck} tone="harvest" />
-        <StatCard label="Completed redistributions" value="3,472" hint="All time" icon={ShieldCheck} />
-        <StatCard label="Waste prevented (network)" value="18.4 t" hint="All time · Demo Data" icon={Leaf} tone="leaf" />
+        <StatCard
+          label="Registered providers"
+          value="148"
+          hint="+6 this month"
+          icon={Building2}
+          tone="cool"
+        />
+        <StatCard
+          label="Verified recipients"
+          value="96"
+          hint={`${pending} pending verification`}
+          icon={BadgeCheck}
+          tone="leaf"
+        />
+        <StatCard
+          label="Active redistributions"
+          value="12"
+          hint="Across 4 zones"
+          icon={Truck}
+          tone="harvest"
+        />
+        <StatCard
+          label="Completed redistributions"
+          value="3,472"
+          hint="All time"
+          icon={ShieldCheck}
+        />
+        <StatCard
+          label="Waste prevented (network)"
+          value="18.4 t"
+          hint="All time · Demo Data"
+          icon={Leaf}
+          tone="leaf"
+        />
         <StatCard label="Volunteers on duty" value="37" hint="Live shift roster" icon={Users2} />
       </div>
 

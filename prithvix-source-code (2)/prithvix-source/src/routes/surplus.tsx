@@ -114,7 +114,10 @@ function SurplusPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="storage">Handling / storage status</Label>
-                  <Select value={form.storage} onValueChange={(v) => setForm({ ...form, storage: v })}>
+                  <Select
+                    value={form.storage}
+                    onValueChange={(v) => setForm({ ...form, storage: v })}
+                  >
                     <SelectTrigger id="storage" className="w-full">
                       <SelectValue />
                     </SelectTrigger>
@@ -176,8 +179,8 @@ function SurplusPage() {
               <CardContent className="flex h-full flex-col justify-center gap-2 py-12 text-center">
                 <p className="font-display text-lg font-semibold">Nothing submitted yet</p>
                 <p className="mx-auto max-w-sm text-sm text-muted-foreground">
-                  Once you record surplus, PrithviX checks eligible verified recipients nearby and moves
-                  you into smart matching.
+                  Once you record surplus, PrithviX checks eligible verified recipients nearby and
+                  moves you into smart matching.
                 </p>
               </CardContent>
             </Card>
@@ -197,7 +200,9 @@ function SurplusPage() {
                   <p className="mt-1 text-muted-foreground">
                     Prepared {surplus?.preparedAt} · logged {surplus?.currentTime}
                   </p>
-                  {surplus?.notes && <p className="mt-2 text-muted-foreground">“{surplus.notes}”</p>}
+                  {surplus?.notes && (
+                    <p className="mt-2 text-muted-foreground">“{surplus.notes}”</p>
+                  )}
                 </div>
 
                 <div className="space-y-3 rounded-xl border border-border p-4">
@@ -207,7 +212,9 @@ function SurplusPage() {
                     ) : (
                       <Loader2 className="size-4 animate-spin text-primary" aria-hidden="true" />
                     )}
-                    {phase === "ready" ? "4 eligible recipients found" : "Checking eligible recipients…"}
+                    {phase === "ready"
+                      ? "4 eligible recipients found"
+                      : "Checking eligible recipients…"}
                   </div>
                   <ol className="space-y-2 text-sm text-muted-foreground">
                     {[

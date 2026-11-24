@@ -31,12 +31,36 @@ export const Route = createFileRoute("/impact")({
 });
 
 const CARDS = [
-  { label: "Food waste prevented", value: "1,284 kg", hint: "+12.4% vs last month", icon: Leaf, tone: "leaf" as const },
-  { label: "Meals rescued", value: "5,140", hint: "+8.1% vs last month", icon: Utensils, tone: "cool" as const },
+  {
+    label: "Food waste prevented",
+    value: "1,284 kg",
+    hint: "+12.4% vs last month",
+    icon: Leaf,
+    tone: "leaf" as const,
+  },
+  {
+    label: "Meals rescued",
+    value: "5,140",
+    hint: "+8.1% vs last month",
+    icon: Utensils,
+    tone: "cool" as const,
+  },
   { label: "Food recovered", value: "1,072 kg", hint: "+9.6% vs last month", icon: Scale },
-  { label: "Estimated cost saved", value: "₹3,86,400", hint: "+11.2% vs last month", icon: Coins, tone: "harvest" as const },
+  {
+    label: "Estimated cost saved",
+    value: "₹3,86,400",
+    hint: "+11.2% vs last month",
+    icon: Coins,
+    tone: "harvest" as const,
+  },
   { label: "Average rescue time", value: "38 min", hint: "-6 min vs last month", icon: Clock },
-  { label: "Prediction accuracy", value: "91%", hint: "Sample score, not validated ML", icon: BarChart3, tone: "leaf" as const },
+  {
+    label: "Prediction accuracy",
+    value: "91%",
+    hint: "Sample score, not validated ML",
+    icon: BarChart3,
+    tone: "leaf" as const,
+  },
 ];
 
 function ImpactPage() {
@@ -47,14 +71,21 @@ function ImpactPage() {
       actions={<DemoBadge className="hidden sm:inline-flex" />}
     >
       <div className="mb-4 rounded-xl border border-harvest/40 bg-accent px-4 py-3 text-sm text-accent-foreground">
-        <strong className="font-semibold">Demo Data:</strong> all metrics, trends and accuracy figures on
-        this page are seeded sample values for prototype demonstration. They are not measured outcomes and
-        do not reflect a validated model.
+        <strong className="font-semibold">Demo Data:</strong> all metrics, trends and accuracy
+        figures on this page are seeded sample values for prototype demonstration. They are not
+        measured outcomes and do not reflect a validated model.
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {CARDS.map((c) => (
-          <StatCard key={c.label} label={`${c.label} (Demo Data)`} value={c.value} hint={c.hint} icon={c.icon} tone={c.tone} />
+          <StatCard
+            key={c.label}
+            label={`${c.label} (Demo Data)`}
+            value={c.value}
+            hint={c.hint}
+            icon={c.icon}
+            tone={c.tone}
+          />
         ))}
       </div>
 
@@ -81,7 +112,9 @@ function ImpactPage() {
 
         <Card className="lg:col-span-2">
           <CardHeader className="flex-row items-center justify-between gap-2">
-            <CardTitle className="text-base">Predicted vs actual consumption (last 7 services)</CardTitle>
+            <CardTitle className="text-base">
+              Predicted vs actual consumption (last 7 services)
+            </CardTitle>
             <DemoBadge />
           </CardHeader>
           <CardContent>

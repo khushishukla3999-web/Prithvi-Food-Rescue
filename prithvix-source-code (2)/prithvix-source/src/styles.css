@@ -222,15 +222,18 @@
 
 /* Food card hover effects */
 .food-card-hover {
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, box-shadow;
 }
 
 .food-card-hover:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 28px -6px oklch(0.24 0.03 152 / 12%), 0 6px 12px -3px oklch(0.24 0.03 152 / 6%);
+  box-shadow:
+    0 12px 28px -6px oklch(0.24 0.03 152 / 12%),
+    0 6px 12px -3px oklch(0.24 0.03 152 / 6%);
   border-color: color-mix(in oklab, var(--color-primary) 35%, var(--color-border));
 }
 
@@ -259,16 +262,29 @@
 
 @utility surface-grid {
   background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--color-border) 70%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--color-border) 70%, transparent) 1px, transparent 1px);
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-border) 70%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-border) 70%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 28px 28px;
 }
 
 @utility hero-wash {
-  background-image: radial-gradient(
+  background-image:
+    radial-gradient(
       70% 90% at 12% 0%,
       color-mix(in oklab, var(--color-leaf) 22%, transparent),
       transparent 60%
     ),
-    radial-gradient(60% 80% at 95% 10%, color-mix(in oklab, var(--color-harvest) 20%, transparent), transparent 60%);
+    radial-gradient(
+      60% 80% at 95% 10%,
+      color-mix(in oklab, var(--color-harvest) 20%, transparent),
+      transparent 60%
+    );
 }

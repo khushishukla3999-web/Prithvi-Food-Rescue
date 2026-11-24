@@ -28,7 +28,9 @@ export function StatCard({
     <Card className={cn("gap-0 py-4 transition-shadow hover:shadow-md", className)}>
       <CardContent className="px-4">
         <div className="flex items-start justify-between gap-3">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            {label}
+          </p>
           {Icon && (
             <span className={cn("grid size-8 shrink-0 place-items-center rounded-lg", toneRing)}>
               <Icon className="size-4" aria-hidden="true" />
@@ -57,7 +59,10 @@ export function StatusDot({ status }: { status: string }) {
   };
   return (
     <span className="inline-flex items-center gap-2 text-sm">
-      <span className={cn("size-2 rounded-full", map[status] ?? "bg-muted-foreground")} aria-hidden="true" />
+      <span
+        className={cn("size-2 rounded-full", map[status] ?? "bg-muted-foreground")}
+        aria-hidden="true"
+      />
       {status}
     </span>
   );

@@ -58,8 +58,22 @@ export function DemandChart({
           strokeWidth={2.5}
           fill="url(#gPredicted)"
         />
-        <Line type="monotone" dataKey="prepared" name="Recommended prep" stroke="var(--color-chart-3)" strokeWidth={2} dot={false} />
-        <Line type="monotone" dataKey="actual" name="Actual served" stroke="var(--color-chart-4)" strokeWidth={2} dot={{ r: 3 }} />
+        <Line
+          type="monotone"
+          dataKey="prepared"
+          name="Recommended prep"
+          stroke="var(--color-chart-3)"
+          strokeWidth={2}
+          dot={false}
+        />
+        <Line
+          type="monotone"
+          dataKey="actual"
+          name="Actual served"
+          stroke="var(--color-chart-4)"
+          strokeWidth={2}
+          dot={{ r: 3 }}
+        />
       </AreaChart>
     </ResponsiveContainer>
   );
@@ -73,7 +87,13 @@ export function WasteTrendChart({ data }: { data: { month: string; waste: number
         <XAxis dataKey="month" {...axis} />
         <YAxis {...axis} />
         <Tooltip {...tooltipStyle} cursor={{ fill: "var(--color-muted)" }} />
-        <Bar dataKey="waste" name="Waste (kg)" fill="var(--color-chart-3)" radius={[6, 6, 0, 0]} maxBarSize={38} />
+        <Bar
+          dataKey="waste"
+          name="Waste (kg)"
+          fill="var(--color-chart-3)"
+          radius={[6, 6, 0, 0]}
+          maxBarSize={38}
+        />
       </BarChart>
     </ResponsiveContainer>
   );
@@ -119,8 +139,22 @@ export function PredictedVsActualChart({
         <YAxis {...axis} />
         <Tooltip {...tooltipStyle} />
         <Legend wrapperStyle={{ fontSize: 12 }} />
-        <Line type="monotone" dataKey="predicted" name="Predicted" stroke="var(--color-chart-1)" strokeWidth={2.5} dot={false} />
-        <Line type="monotone" dataKey="actual" name="Actual consumption" stroke="var(--color-chart-5)" strokeWidth={2.5} dot={{ r: 3 }} />
+        <Line
+          type="monotone"
+          dataKey="predicted"
+          name="Predicted"
+          stroke="var(--color-chart-1)"
+          strokeWidth={2.5}
+          dot={false}
+        />
+        <Line
+          type="monotone"
+          dataKey="actual"
+          name="Actual consumption"
+          stroke="var(--color-chart-5)"
+          strokeWidth={2.5}
+          dot={{ r: 3 }}
+        />
       </LineChart>
     </ResponsiveContainer>
   );

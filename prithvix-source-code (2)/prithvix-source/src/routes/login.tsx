@@ -45,7 +45,8 @@ export const Route = createFileRoute("/login")({
       { property: "og:title", content: "Sign In & Sign Up — Prithvi Food Rescue" },
       {
         property: "og:description",
-        content: "Access your dashboard to predict demand, prevent food waste, and coordinate rescues.",
+        content:
+          "Access your dashboard to predict demand, prevent food waste, and coordinate rescues.",
       },
     ],
   }),
@@ -136,7 +137,9 @@ function LoginPage() {
     setLoginError("");
   }
 
-  const currentDashboard = role ? (ROLES.find((r) => r.id === role)?.home ?? "/provider") : "/provider";
+  const currentDashboard = role
+    ? (ROLES.find((r) => r.id === role)?.home ?? "/provider")
+    : "/provider";
 
   return (
     <div className="hero-wash min-h-screen">
@@ -151,8 +154,8 @@ function LoginPage() {
               <div>
                 <p className="font-semibold text-primary">Currently signed in</p>
                 <p className="text-muted-foreground">
-                  <span className="font-medium text-foreground">{currentUser.name}</span> ({currentUser.email}) ·{" "}
-                  {currentUser.org}
+                  <span className="font-medium text-foreground">{currentUser.name}</span> (
+                  {currentUser.email}) · {currentUser.org}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -182,8 +185,8 @@ function LoginPage() {
             Join the Food Rescue Mission
           </h1>
           <p className="mt-3 text-muted-foreground">
-            Sign in to your account, create a new organization profile, or use one-click demo personas to explore
-            the dashboards.
+            Sign in to your account, create a new organization profile, or use one-click demo
+            personas to explore the dashboards.
           </p>
         </div>
 
@@ -284,7 +287,8 @@ function LoginPage() {
                 <CardHeader>
                   <CardTitle className="text-xl">Create a New Account</CardTitle>
                   <CardDescription>
-                    Register as a food provider, recipient shelter, volunteer driver, or network admin.
+                    Register as a food provider, recipient shelter, volunteer driver, or network
+                    admin.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -363,7 +367,10 @@ function LoginPage() {
 
                     <div className="space-y-1.5">
                       <Label htmlFor="signup-role">Select Your Role</Label>
-                      <Select value={signupRole} onValueChange={(val) => setSignupRole(val as RoleId)}>
+                      <Select
+                        value={signupRole}
+                        onValueChange={(val) => setSignupRole(val as RoleId)}
+                      >
                         <SelectTrigger id="signup-role" className="w-full">
                           <SelectValue placeholder="Select a role" />
                         </SelectTrigger>
@@ -379,7 +386,8 @@ function LoginPage() {
                     </div>
 
                     <Button type="submit" className="w-full" disabled={isSigningUp}>
-                      {isSigningUp ? "Creating Account..." : "Create Account"} <ArrowRight className="size-4" />
+                      {isSigningUp ? "Creating Account..." : "Create Account"}{" "}
+                      <ArrowRight className="size-4" />
                     </Button>
                   </form>
                 </CardContent>
@@ -392,7 +400,10 @@ function LoginPage() {
                 {ROLES.map((roleItem) => {
                   const Icon = ICONS[roleItem.id];
                   return (
-                    <Card key={roleItem.id} className="group food-card-hover transition-shadow hover:shadow-lg">
+                    <Card
+                      key={roleItem.id}
+                      className="group food-card-hover transition-shadow hover:shadow-lg"
+                    >
                       <CardContent className="flex h-full flex-col gap-4">
                         <div className="flex items-start gap-3">
                           <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary transition-transform duration-200 group-hover:scale-105">
@@ -404,7 +415,8 @@ function LoginPage() {
                           </div>
                         </div>
                         <div className="rounded-lg border border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
-                          Demo account: <span className="font-medium text-foreground">{roleItem.demoUser}</span> ·{" "}
+                          Demo account:{" "}
+                          <span className="font-medium text-foreground">{roleItem.demoUser}</span> ·{" "}
                           {roleItem.org}
                         </div>
                         <Button
@@ -423,8 +435,8 @@ function LoginPage() {
         </div>
 
         <p className="mt-8 text-xs text-muted-foreground">
-          {BRAND.name} authentication prototype. Accounts created in this session are safely preserved in your
-          browser's local storage.
+          {BRAND.name} authentication prototype. Accounts created in this session are safely
+          preserved in your browser's local storage.
         </p>
       </div>
     </div>

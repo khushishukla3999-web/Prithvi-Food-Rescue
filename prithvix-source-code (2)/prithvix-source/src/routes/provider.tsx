@@ -99,18 +99,25 @@ function ProviderDashboard() {
             </p>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
               This recommendation considers expected attendance, the planned menu, your kitchen's
-              consumption history, the day of the week, and any events or holidays on the calendar. It sits
-              deliberately below the raw forecast of {prediction.predicted} meals so leftovers stay small
-              and rescuable.
+              consumption history, the day of the week, and any events or holidays on the calendar.
+              It sits deliberately below the raw forecast of {prediction.predicted} meals so
+              leftovers stay small and rescuable.
             </p>
             <div className="mt-4 flex flex-wrap gap-2 text-xs">
-              {["Attendance", "Menu type", "Consumption history", "Day of week", "Events & holidays"].map(
-                (f) => (
-                  <span key={f} className="rounded-full border border-primary/25 bg-card px-3 py-1 font-medium">
-                    {f}
-                  </span>
-                ),
-              )}
+              {[
+                "Attendance",
+                "Menu type",
+                "Consumption history",
+                "Day of week",
+                "Events & holidays",
+              ].map((f) => (
+                <span
+                  key={f}
+                  className="rounded-full border border-primary/25 bg-card px-3 py-1 font-medium"
+                >
+                  {f}
+                </span>
+              ))}
             </div>
             <div className="mt-5 flex flex-wrap gap-2">
               <Button asChild>
@@ -124,12 +131,14 @@ function ProviderDashboard() {
             </div>
           </div>
           <div className="rounded-xl border border-border bg-card p-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Model confidence</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              Model confidence
+            </p>
             <p className="mt-1 font-display text-3xl font-semibold">{snapshot.confidence}%</p>
             <Progress value={snapshot.confidence} className="mt-3" />
             <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-              Illustrative confidence score generated in-app for this prototype. It does not represent a
-              trained or validated machine-learning model.
+              Illustrative confidence score generated in-app for this prototype. It does not
+              represent a trained or validated machine-learning model.
             </p>
           </div>
         </CardContent>
