@@ -20,6 +20,91 @@ export type SurplusRecord = {
   createdAt: number;
 };
 
+export type DonationItem = {
+  id: string;
+  foodName: string;
+  quantityKg: number;
+  meals: number;
+  category: string;
+  pickupLocation: string;
+  preparedAt: string;
+  expiresAt: string;
+  storage: string;
+  donorName: string;
+  donorContact?: string;
+  notes?: string;
+  status: "Available" | "Requested" | "Collected";
+  distanceKm?: number;
+  createdAt: number;
+};
+
+export type NewDonationInput = {
+  foodName: string;
+  quantityKg: number;
+  category: string;
+  pickupLocation: string;
+  preparedAt: string;
+  expiresAt: string;
+  storage?: string;
+  donorName?: string;
+  donorContact?: string;
+  notes?: string;
+};
+
+export const INITIAL_DONATIONS: DonationItem[] = [
+  {
+    id: "d1",
+    foodName: "Veg pulao & dal",
+    quantityKg: 18,
+    meals: 72,
+    category: "Cooked Meals",
+    pickupLocation: "Sunrise Campus Kitchen, Sector 4, Pune",
+    preparedAt: "12:15 PM",
+    expiresAt: "8:30 PM",
+    storage: "Hot holding, 65°C",
+    donorName: "Sunrise Campus Kitchen",
+    donorContact: "+91 98230 11223",
+    notes: "Freshly prepared lunch batch, packed in insulated warm containers.",
+    status: "Available",
+    distanceKm: 2.1,
+    createdAt: 1709400000000,
+  },
+  {
+    id: "d2",
+    foodName: "Assorted sandwiches",
+    quantityKg: 9,
+    meals: 36,
+    category: "Bakery & Snacks",
+    pickupLocation: "Metro Tech Park Cafeteria, Hinjawadi Phase 1",
+    preparedAt: "1:00 PM",
+    expiresAt: "7:00 PM",
+    storage: "Chilled, 4°C",
+    donorName: "Metro Tech Park Cafeteria",
+    donorContact: "+91 97654 33210",
+    notes: "Individually wrapped vegetarian sandwiches from lunch buffet.",
+    status: "Available",
+    distanceKm: 3.9,
+    createdAt: 1709400000000,
+  },
+  {
+    id: "d3",
+    foodName: "Paneer curry & rotis",
+    quantityKg: 26,
+    meals: 104,
+    category: "Cooked Meals",
+    pickupLocation: "Hotel Vaishnavi Banquets, Shivajinagar",
+    preparedAt: "2:30 PM",
+    expiresAt: "10:00 PM",
+    storage: "Hot holding, 70°C",
+    donorName: "Hotel Vaishnavi Banquets",
+    donorContact: "+91 98901 44556",
+    notes: "Unserved banquet food, pristine condition in stainless steel containers.",
+    status: "Available",
+    distanceKm: 5.6,
+    createdAt: 1709400000000,
+  },
+];
+
 export type PredictionState = {
   attendance: number;
   menu: string;
@@ -158,6 +243,11 @@ type Ctx = {
   advanceTracking: () => void;
   resetFlow: () => void;
   snapshot: typeof PROVIDER_SNAPSHOT;
+  donations: DonationItem[];
+  addDonation: (
+    input: NewDonationInput,
+  ) => Promise<{ success: boolean; error?: string; donation?: DonationItem }>;
+  requestDonation: (id: string) => void;
 };
 
 const DemoContext = React.createContext<Ctx | null>(null);
@@ -181,6 +271,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const [surplus, setSurplus] = React.useState<SurplusRecord | null>(DEFAULT_SURPLUS);
   const [matchedId, setMatchedId] = React.useState<string | null>(null);
   const [trackingStage, setTrackingStage] = React.useState(1);
+  const [donations, setDonations] = React.useState<DonationItem[]>(INITIAL_DONATIONS);
 
   React.useEffect(() => {
     try {
@@ -427,6 +518,65 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const addDonation = React.useCallback(
+    async (
+      input: NewDonationInput,
+    ): Promise<{ success: boolean; error?: string; donation?: DonationItem }> => {
+      const meals = Math.round(input.quantityKg * 4);
+      const newDonation: DonationItem = {
+        id: `don-${Date.now()}`,
+        foodName: input.foodName.trim(),
+        quantityKg: Number(input.quantityKg),
+        meals,
+        category: input.category || "Cooked Meals",
+        pickupLocation: input.pickupLocation.trim(),
+        preparedAt: input.preparedAt,
+        expiresAt: input.expiresAt,
+        storage: input.storage || "Ambient, covered trays",
+        donorName:
+          input.donorName?.trim() ||
+          currentUser?.org ||
+          currentUser?.name ||
+          "Community Food Donor",
+        donorContact: input.donorContact?.trim() || "",
+        notes: input.notes?.trim() || "",
+        status: "Available",
+        distanceKm: 1.8,
+        createdAt: Date.now(),
+      };
+
+      // Connect to existing backend if configured; do not create fake data persistence
+      const backendUrl =
+        typeof import.meta !== "undefined" && import.meta.env
+          ? ((import.meta.env["VITE_API_URL"] || import.meta.env["VITE_BACKEND_URL"]) as
+              string | undefined)
+          : undefined;
+
+      if (backendUrl) {
+        try {
+          const res = await fetch(`${backendUrl}/api/donations`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newDonation),
+          });
+          if (!res.ok) {
+            console.warn("Backend API responded with status:", res.status);
+          }
+        } catch (err) {
+          console.warn("Backend API endpoint unreachable:", err);
+        }
+      }
+
+      setDonations((prev) => [newDonation, ...prev]);
+      return { success: true, donation: newDonation };
+    },
+    [currentUser],
+  );
+
+  const requestDonation = React.useCallback((id: string) => {
+    setDonations((prev) => prev.map((d) => (d.id === id ? { ...d, status: "Requested" } : d)));
+  }, []);
+
   const value: Ctx = {
     currentUser,
     role,
@@ -459,8 +609,12 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
       setSurplus(DEFAULT_SURPLUS);
       setMatchedId(null);
       setTrackingStage(1);
+      setDonations(INITIAL_DONATIONS);
     },
     snapshot: PROVIDER_SNAPSHOT,
+    donations,
+    addDonation,
+    requestDonation,
   };
 
   return <DemoContext.Provider value={value}>{children}</DemoContext.Provider>;

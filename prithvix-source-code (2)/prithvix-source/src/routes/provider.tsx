@@ -45,11 +45,16 @@ function ProviderDashboard() {
       title="Food Provider Dashboard"
       subtitle="Sunrise Campus Kitchen · Sunday dinner service"
       actions={
-        <Button asChild className="hidden sm:inline-flex">
-          <Link to="/surplus">
-            Report surplus <ArrowRight className="size-4" />
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button asChild variant="outline" className="hidden sm:inline-flex">
+            <Link to="/donate">Donate food</Link>
+          </Button>
+          <Button asChild className="hidden sm:inline-flex">
+            <Link to="/surplus">
+              Report surplus <ArrowRight className="size-4" />
+            </Link>
+          </Button>
+        </div>
       }
     >
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

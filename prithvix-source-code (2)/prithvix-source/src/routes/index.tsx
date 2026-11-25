@@ -3,6 +3,7 @@ import {
   ArrowRight,
   Brain,
   HandHeart,
+  HeartHandshake,
   Leaf,
   PackageSearch,
   Route as RouteIcon,
@@ -93,6 +94,11 @@ function Landing() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <Logo />
           <div className="flex items-center gap-2">
+            <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex">
+              <Link to="/donate">
+                <HeartHandshake className="mr-1.5 size-4 text-primary" /> Donate Food
+              </Link>
+            </Button>
             {currentUser || role ? (
               <Button asChild>
                 <Link to={currentDashboard}>
@@ -137,7 +143,9 @@ function Landing() {
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link to="/provider">Go straight to provider dashboard</Link>
+                <Link to="/donate">
+                  <HeartHandshake className="mr-2 size-4 text-primary" /> Donate Food
+                </Link>
               </Button>
             </div>
             <p className="mt-4 text-xs text-muted-foreground">

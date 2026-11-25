@@ -37,6 +37,7 @@ const PROVIDER_NAV: NavItem[] = [
   { to: "/prediction", label: "Demand Prediction", icon: LineChart, step: 2 },
   { to: "/recommendation", label: "Preparation Recommendation", icon: ChefHat, step: 3 },
   { to: "/surplus", label: "Surplus", icon: PackagePlus, step: 4 },
+  { to: "/donate", label: "Food Donation", icon: HeartHandshake },
   { to: "/matching", label: "Matching", icon: Users, step: 5 },
   { to: "/tracking", label: "Tracking", icon: RouteIcon, step: 6 },
   { to: "/impact", label: "Impact", icon: BarChart3, step: 7 },
@@ -46,16 +47,19 @@ const NAV_BY_ROLE: Record<RoleId, NavItem[]> = {
   provider: PROVIDER_NAV,
   recipient: [
     { to: "/recipient", label: "Recipient Dashboard", icon: HeartHandshake },
+    { to: "/donate", label: "Food Donation", icon: PackagePlus },
     { to: "/tracking", label: "Tracking", icon: RouteIcon },
     { to: "/impact", label: "Impact", icon: BarChart3 },
   ],
   volunteer: [
     { to: "/volunteer", label: "My Assignments", icon: Truck },
+    { to: "/donate", label: "Food Donation", icon: HeartHandshake },
     { to: "/tracking", label: "Tracking", icon: RouteIcon },
     { to: "/impact", label: "Impact", icon: BarChart3 },
   ],
   admin: [
     { to: "/admin", label: "Network Overview", icon: ShieldCheck },
+    { to: "/donate", label: "Food Donation", icon: HeartHandshake },
     { to: "/matching", label: "Matching", icon: Users },
     { to: "/tracking", label: "Tracking", icon: RouteIcon },
     { to: "/impact", label: "Impact", icon: BarChart3 },
