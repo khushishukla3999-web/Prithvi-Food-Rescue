@@ -105,6 +105,67 @@ export const INITIAL_DONATIONS: DonationItem[] = [
   },
 ];
 
+export type FoodClaimRequest = {
+  id: string;
+  donationId: string;
+  foodName: string;
+  quantityKg: number;
+  meals: number;
+  category: string;
+  provider: string;
+  pickupLocation: string;
+  recipientId: string;
+  recipientName: string;
+  recipientOrg: string;
+  status: "Requested" | "Approved" | "In transit" | "Delivered" | "Cancelled";
+  eta: string;
+  trackingStage: number;
+  notes?: string | undefined;
+  createdAt: number;
+  updatedAt: number;
+};
+
+export const INITIAL_REQUESTS: FoodClaimRequest[] = [
+  {
+    id: "req-1",
+    donationId: "d1",
+    foodName: "Veg biryani",
+    quantityKg: 22,
+    meals: 88,
+    category: "Cooked Meals",
+    provider: "Green Leaf Caterers",
+    pickupLocation: "Green Leaf Caterers, Kothrud, Pune",
+    recipientId: "u-recipient",
+    recipientName: "Ravi Menon",
+    recipientOrg: "Annapurna Seva Trust",
+    status: "In transit",
+    eta: "16 min",
+    trackingStage: 3,
+    notes: "Insulated food carrier assigned.",
+    createdAt: 1709400000000 - 7200000,
+    updatedAt: 1709400000000 - 1800000,
+  },
+  {
+    id: "req-2",
+    donationId: "d2",
+    foodName: "Khichdi & Kadhi",
+    quantityKg: 12,
+    meals: 48,
+    category: "Cooked Meals",
+    provider: "Sunrise Campus Kitchen",
+    pickupLocation: "Sunrise Campus Kitchen, Sector 4, Pune",
+    recipientId: "u-recipient",
+    recipientName: "Ravi Menon",
+    recipientOrg: "Annapurna Seva Trust",
+    status: "Requested",
+    eta: "34 min",
+    trackingStage: 1,
+    notes: "Pickup scheduled for 8:15 PM.",
+    createdAt: 1709400000000 - 1800000,
+    updatedAt: 1709400000000 - 1800000,
+  },
+];
+
 export type PredictionState = {
   attendance: number;
   menu: string;
@@ -248,6 +309,18 @@ type Ctx = {
     input: NewDonationInput,
   ) => Promise<{ success: boolean; error?: string; donation?: DonationItem }>;
   requestDonation: (id: string) => void;
+  requests: FoodClaimRequest[];
+  activeRequestId: string | null;
+  setActiveRequestId: (id: string | null) => void;
+  claimDonation: (
+    donationId: string,
+    options?: { requestedKg?: number; notes?: string },
+  ) => Promise<{ success: boolean; error?: string; request?: FoodClaimRequest }>;
+  updateRequestStatus: (
+    requestId: string,
+    status: FoodClaimRequest["status"],
+    stage?: number,
+  ) => Promise<void>;
 };
 
 const DemoContext = React.createContext<Ctx | null>(null);
@@ -272,8 +345,29 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const [matchedId, setMatchedId] = React.useState<string | null>(null);
   const [trackingStage, setTrackingStage] = React.useState(1);
   const [donations, setDonations] = React.useState<DonationItem[]>(INITIAL_DONATIONS);
+  const [requests, setRequests] = React.useState<FoodClaimRequest[]>(INITIAL_REQUESTS);
+  const [activeRequestId, setActiveRequestId] = React.useState<string | null>(null);
 
   React.useEffect(() => {
+    try {
+      const storedDonations = window.localStorage.getItem("prithvix-donations");
+      if (storedDonations) {
+        const parsed = JSON.parse(storedDonations) as DonationItem[];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setDonations(parsed);
+        }
+      }
+
+      const storedClaims = window.localStorage.getItem("prithvix-claims");
+      if (storedClaims) {
+        const parsed = JSON.parse(storedClaims) as FoodClaimRequest[];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setRequests(parsed);
+        }
+      }
+    } catch (_e) {
+      // ignore storage error
+    }
     try {
       const storedUser = window.localStorage.getItem("prithvix-current-user");
       if (storedUser) {
@@ -567,15 +661,166 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      setDonations((prev) => [newDonation, ...prev]);
+      setDonations((prev) => {
+        const next = [newDonation, ...prev];
+        try {
+          window.localStorage.setItem("prithvix-donations", JSON.stringify(next));
+        } catch (_e) {
+          // ignore storage error
+        }
+        return next;
+      });
       return { success: true, donation: newDonation };
     },
     [currentUser],
   );
 
   const requestDonation = React.useCallback((id: string) => {
-    setDonations((prev) => prev.map((d) => (d.id === id ? { ...d, status: "Requested" } : d)));
+    setDonations((prev) => {
+      const next = prev.map((d) => (d.id === id ? { ...d, status: "Requested" as const } : d));
+      try {
+        window.localStorage.setItem("prithvix-donations", JSON.stringify(next));
+      } catch (_e) {
+        // ignore storage error
+      }
+      return next;
+    });
   }, []);
+
+  const claimDonation = React.useCallback(
+    async (
+      donationId: string,
+      options?: { requestedKg?: number; notes?: string },
+    ): Promise<{ success: boolean; error?: string; request?: FoodClaimRequest }> => {
+      const target = donations.find((d) => d.id === donationId);
+      if (!target) {
+        return { success: false, error: "Donation listing not found or no longer available." };
+      }
+      if (target.status !== "Available") {
+        return {
+          success: false,
+          error: "This food donation has already been requested by another recipient.",
+        };
+      }
+
+      const claimKg =
+        options?.requestedKg && options.requestedKg > 0
+          ? Math.min(options.requestedKg, target.quantityKg)
+          : target.quantityKg;
+      const meals = Math.round(claimKg * 4);
+
+      const recipientId = currentUser?.id ?? "u-recipient";
+      const recipientName = currentUser?.name ?? "Ravi Menon";
+      const recipientOrg = currentUser?.org ?? "Annapurna Seva Trust";
+
+      const newReq: FoodClaimRequest = {
+        id: `req-${Date.now()}`,
+        donationId: target.id,
+        foodName: target.foodName,
+        quantityKg: claimKg,
+        meals,
+        category: target.category,
+        provider: target.donorName,
+        pickupLocation: target.pickupLocation,
+        recipientId,
+        recipientName,
+        recipientOrg,
+        status: "Requested",
+        eta: "20-30 min",
+        trackingStage: 1,
+        notes: options?.notes?.trim() || "",
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+
+      const backendUrl =
+        typeof import.meta !== "undefined" && import.meta.env
+          ? ((import.meta.env["VITE_API_URL"] || import.meta.env["VITE_BACKEND_URL"]) as
+              string | undefined)
+          : undefined;
+
+      if (backendUrl) {
+        try {
+          const res = await fetch(`${backendUrl}/api/claims`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newReq),
+          });
+          if (!res.ok) {
+            console.warn("Backend API claim error:", res.status);
+          }
+        } catch (err) {
+          console.warn("Backend claim endpoint error:", err);
+        }
+      }
+
+      const nextDonations = donations.map((d) =>
+        d.id === donationId ? { ...d, status: "Requested" as const } : d,
+      );
+      setDonations(nextDonations);
+      try {
+        window.localStorage.setItem("prithvix-donations", JSON.stringify(nextDonations));
+      } catch (_e) {
+        // ignore storage error
+      }
+
+      setRequests((prev) => {
+        const nextReqs = [newReq, ...prev];
+        try {
+          window.localStorage.setItem("prithvix-claims", JSON.stringify(nextReqs));
+        } catch (_e) {
+          // ignore storage error
+        }
+        return nextReqs;
+      });
+
+      setActiveRequestId(newReq.id);
+      return { success: true, request: newReq };
+    },
+    [currentUser, donations],
+  );
+
+  const updateRequestStatus = React.useCallback(
+    async (requestId: string, status: FoodClaimRequest["status"], stage?: number) => {
+      setRequests((prev) => {
+        const next = prev.map((r) => {
+          if (r.id !== requestId) return r;
+          const nextStage = stage !== undefined ? stage : Math.min(5, r.trackingStage + 1);
+          return {
+            ...r,
+            status,
+            trackingStage: nextStage,
+            updatedAt: Date.now(),
+          };
+        });
+        try {
+          window.localStorage.setItem("prithvix-claims", JSON.stringify(next));
+        } catch (_e) {
+          // ignore storage error
+        }
+        return next;
+      });
+
+      const backendUrl =
+        typeof import.meta !== "undefined" && import.meta.env
+          ? ((import.meta.env["VITE_API_URL"] || import.meta.env["VITE_BACKEND_URL"]) as
+              string | undefined)
+          : undefined;
+
+      if (backendUrl) {
+        try {
+          await fetch(`${backendUrl}/api/claims/${requestId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status, stage }),
+          });
+        } catch (_e) {
+          // ignore error
+        }
+      }
+    },
+    [],
+  );
 
   const value: Ctx = {
     currentUser,
@@ -610,11 +855,24 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
       setMatchedId(null);
       setTrackingStage(1);
       setDonations(INITIAL_DONATIONS);
+      setRequests(INITIAL_REQUESTS);
+      setActiveRequestId(null);
+      try {
+        window.localStorage.removeItem("prithvix-donations");
+        window.localStorage.removeItem("prithvix-claims");
+      } catch (_e) {
+        // ignore storage error
+      }
     },
     snapshot: PROVIDER_SNAPSHOT,
     donations,
     addDonation,
     requestDonation,
+    requests,
+    activeRequestId,
+    setActiveRequestId,
+    claimDonation,
+    updateRequestStatus,
   };
 
   return <DemoContext.Provider value={value}>{children}</DemoContext.Provider>;

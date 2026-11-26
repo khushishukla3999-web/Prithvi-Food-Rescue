@@ -1,14 +1,23 @@
+import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CheckCircle2, Circle, Loader2, RotateCcw } from "lucide-react";
+import { CheckCircle2, Circle, Loader2, PackageCheck, RotateCcw, Truck } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { AppShell } from "@/components/prithvix/app-shell";
 import { DemoBadge } from "@/components/prithvix/brand";
 import { RouteMap } from "@/components/prithvix/route-map";
 import { StatCard } from "@/components/prithvix/stat-card";
 import { RECIPIENTS, TRACKING_STEPS } from "@/lib/demo-data";
-import { useDemo } from "@/lib/demo-store";
+import { useDemo, type FoodClaimRequest } from "@/lib/demo-store";
 
 export const Route = createFileRoute("/tracking")({
   head: () => ({
@@ -30,54 +39,153 @@ export const Route = createFileRoute("/tracking")({
 });
 
 function TrackingPage() {
-  const { surplus, matchedRecipient, trackingStage, advanceTracking, resetFlow } = useDemo();
+  const {
+    surplus,
+    matchedRecipient,
+    trackingStage,
+    advanceTracking,
+    resetFlow,
+    requests,
+    activeRequestId,
+    setActiveRequestId,
+    updateRequestStatus,
+  } = useDemo();
+
   const recipient = matchedRecipient ?? RECIPIENTS[0]!;
-  const stage = Math.max(1, trackingStage);
+
+  // Current active request being tracked, if any
+  const currentRequest: FoodClaimRequest | undefined = activeRequestId
+    ? requests.find((r) => r.id === activeRequestId)
+    : requests[0];
+
+  const isTrackingRequest = !!currentRequest;
+
+  // Tracking stage and progress
+  const stage = isTrackingRequest ? currentRequest.trackingStage : Math.max(1, trackingStage);
   const delivered = stage >= TRACKING_STEPS.length;
   const progress = (stage - 1) / (TRACKING_STEPS.length - 1);
-  const etaLeft = Math.max(0, Math.round(recipient.etaMin * (1 - progress)));
+
+  // Consignment metadata
+  const foodTitle = isTrackingRequest ? currentRequest.foodName : (surplus?.item ?? "Surplus food");
+  const quantityKg = isTrackingRequest ? currentRequest.quantityKg : (surplus?.quantityKg ?? 18);
+  const mealsCount = isTrackingRequest ? currentRequest.meals : (surplus?.meals ?? 72);
+  const fromLocation = isTrackingRequest ? currentRequest.pickupLocation : "Sunrise Campus Kitchen";
+  const toRecipient = isTrackingRequest ? currentRequest.recipientOrg : recipient.org;
+  const distanceKm = isTrackingRequest ? 3.2 : recipient.distanceKm;
+  const baseEtaMin = isTrackingRequest ? 28 : recipient.etaMin;
+  const etaLeft = Math.max(0, Math.round(baseEtaMin * (1 - progress)));
+
+  async function handleAdvance() {
+    if (isTrackingRequest && currentRequest) {
+      const nextStage = Math.min(TRACKING_STEPS.length, currentRequest.trackingStage + 1);
+      let nextStatus: FoodClaimRequest["status"] = "Approved";
+
+      if (nextStage === 2) nextStatus = "Approved";
+      else if (nextStage === 3 || nextStage === 4) nextStatus = "In transit";
+      else if (nextStage === 5) nextStatus = "Delivered";
+
+      await updateRequestStatus(currentRequest.id, nextStatus, nextStage);
+      toast.success(`Updated status for ${currentRequest.foodName} to ${nextStatus}`, {
+        description:
+          nextStage === 5
+            ? "Delivery verified and marked as complete!"
+            : `Stage ${nextStage} of 5.`,
+      });
+    } else {
+      advanceTracking();
+    }
+  }
 
   return (
     <AppShell
       title="Redistribution Tracking"
-      subtitle={`${surplus?.item ?? "Surplus"} → ${recipient.org}`}
+      subtitle={`${foodTitle} (${quantityKg} kg) → ${toRecipient}`}
       actions={
         <Button
           variant="outline"
           className="hidden sm:inline-flex"
           onClick={() => {
             resetFlow();
-            toast.info("Demo rescue reset");
+            toast.info("Demo rescue tracking reset");
           }}
         >
           <RotateCcw className="size-4" /> Reset
         </Button>
       }
     >
+      {/* Consignment Switcher (if multiple requests exist) */}
+      {requests.length > 0 && (
+        <div className="mb-4 flex flex-col gap-2 rounded-xl border border-border bg-card p-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2">
+            <Truck className="size-4 text-primary" />
+            <span className="text-xs font-semibold text-foreground">
+              Select Consignment to Track:
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Select
+              value={currentRequest ? currentRequest.id : "surplus"}
+              onValueChange={(val) => {
+                if (val === "surplus") {
+                  setActiveRequestId(null);
+                } else {
+                  setActiveRequestId(val);
+                }
+              }}
+            >
+              <SelectTrigger className="h-8 w-64 text-xs">
+                <SelectValue placeholder="Choose consignment" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="surplus">Provider Surplus Consignment (Demo)</SelectItem>
+                {requests.map((r) => (
+                  <SelectItem key={r.id} value={r.id}>
+                    {r.foodName} ({r.quantityKg} kg) - {r.status}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {isTrackingRequest && (
+              <Badge variant="outline" className="text-[11px] font-medium text-primary">
+                {currentRequest.status}
+              </Badge>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Top Stat Cards */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard label="Food quantity" value={`${quantityKg} kg`} hint={`≈ ${mealsCount} meals`} />
         <StatCard
-          label="Food quantity"
-          value={`${surplus?.quantityKg ?? 18} kg`}
-          hint={`≈ ${surplus?.meals ?? 72} meals`}
+          label="Recipient"
+          value={toRecipient}
+          hint={isTrackingRequest ? currentRequest.category : recipient.type}
+          tone="leaf"
         />
-        <StatCard label="Recipient" value={recipient.org} hint={recipient.type} tone="leaf" />
-        <StatCard
-          label="Distance"
-          value={`${recipient.distanceKm} km`}
-          hint="Illustrative road distance"
-        />
+        <StatCard label="Distance" value={`${distanceKm} km`} hint="Estimated road transit" />
         <StatCard
           label={delivered ? "Completed in" : "ETA"}
-          value={delivered ? `${recipient.etaMin} min` : `${etaLeft} min`}
+          value={delivered ? `${baseEtaMin} min` : `${etaLeft} min`}
           hint={delivered ? "Handover confirmed" : TRACKING_STEPS[stage - 1]!.label}
           tone="harvest"
         />
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-[1fr_1.1fr]">
+        {/* Rescue Timeline */}
         <Card>
           <CardHeader className="flex-row items-center justify-between gap-2">
-            <CardTitle className="text-base">Rescue timeline</CardTitle>
+            <div>
+              <CardTitle className="text-base font-bold">Rescue Timeline</CardTitle>
+              <CardDescription className="text-xs">
+                {isTrackingRequest
+                  ? `Tracking consignment #${currentRequest.id}`
+                  : "Provider surplus lifecycle"}
+              </CardDescription>
+            </div>
             <DemoBadge />
           </CardHeader>
           <CardContent>
@@ -97,7 +205,9 @@ function TrackingPage() {
                       )}
                     </span>
                     <p
-                      className={`text-sm font-semibold ${done || active ? "text-foreground" : "text-muted-foreground"}`}
+                      className={`text-sm font-semibold ${
+                        done || active ? "text-foreground" : "text-muted-foreground"
+                      }`}
                     >
                       {step.label}
                     </p>
@@ -111,7 +221,7 @@ function TrackingPage() {
             </ol>
 
             <div className="mt-6 flex flex-wrap gap-2">
-              <Button onClick={advanceTracking} disabled={delivered}>
+              <Button onClick={handleAdvance} disabled={delivered}>
                 {delivered ? "Delivery complete" : "Simulate next status"}
               </Button>
               <Button
@@ -132,33 +242,40 @@ function TrackingPage() {
           </CardContent>
         </Card>
 
+        {/* Route Map & Consignment Details */}
         <div className="space-y-4">
           <RouteMap
-            from="Sunrise Campus Kitchen"
-            to={recipient.org}
-            distanceKm={recipient.distanceKm}
-            etaMin={recipient.etaMin}
+            from={fromLocation}
+            to={toRecipient}
+            distanceKm={distanceKm}
+            etaMin={baseEtaMin}
             progress={progress}
-            legs={["Kitchen gate B", "Ring Road", "Lake Junction", `${recipient.org} entrance`]}
+            legs={[
+              fromLocation.split(",")[0] || "Origin pickup",
+              "Ring Road express",
+              "City central bypass",
+              `${toRecipient} distribution center`,
+            ]}
           />
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Consignment details</CardTitle>
+              <CardTitle className="text-base font-bold">Consignment Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
               {[
-                ["Item", surplus?.item ?? "Veg pulao & dal tadka"],
-                ["Handling", surplus?.storage ?? "Hot holding, 65°C"],
-                ["Prepared at", surplus?.preparedAt ?? "12:15"],
-                ["Volunteer", "Kabir Shah · PrithviX Rescue Fleet"],
-                ["Status", delivered ? "Delivered" : TRACKING_STEPS[stage - 1]!.label],
+                ["Consignment item", foodTitle],
+                ["Quantity & portions", `${quantityKg} kg (≈ ${mealsCount} meals)`],
+                ["Origin / Pickup", fromLocation],
+                ["Destination recipient", toRecipient],
+                ["Volunteer / Fleet", "Kabir Shah · PrithviX Rescue Fleet"],
+                ["Current status", delivered ? "Delivered" : TRACKING_STEPS[stage - 1]!.label],
               ].map(([k, v]) => (
                 <div
                   key={k}
                   className="flex items-center justify-between gap-3 border-b border-border pb-2 last:border-0"
                 >
-                  <span className="text-muted-foreground">{k}</span>
-                  <span className="text-right font-medium">{v}</span>
+                  <span className="text-muted-foreground text-xs">{k}</span>
+                  <span className="text-right font-medium text-xs text-foreground">{v}</span>
                 </div>
               ))}
             </CardContent>
