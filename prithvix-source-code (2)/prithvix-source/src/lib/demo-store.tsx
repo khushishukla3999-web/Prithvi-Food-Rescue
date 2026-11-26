@@ -241,7 +241,7 @@ export type SignupInput = {
   email: string;
   password: string;
   role: RoleId;
-  org?: string;
+  org?: string | undefined;
 };
 
 export const DEFAULT_DEMO_USERS: Record<RoleId, AuthUser & { password: string }> = {

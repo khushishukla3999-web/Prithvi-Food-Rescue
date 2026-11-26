@@ -95,7 +95,7 @@ function SignupPage() {
       email,
       password,
       role: selectedRole,
-      org: org.trim() || undefined,
+      ...(org.trim() ? { org: org.trim() } : {}),
     });
     setIsSubmitting(false);
 
