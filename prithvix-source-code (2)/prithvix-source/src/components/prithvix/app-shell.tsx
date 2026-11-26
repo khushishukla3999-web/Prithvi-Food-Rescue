@@ -110,12 +110,35 @@ function SidebarBody({ onNavigate }: { onNavigate?: (() => void) | undefined }) 
       </Link>
       <NavList onNavigate={onNavigate} />
       <div className="mt-auto rounded-xl border border-sidebar-border bg-sidebar-accent/60 p-3">
-        <p className="text-xs font-semibold text-sidebar-accent-foreground">
-          {currentUser?.org ?? roleMeta?.org ?? "Demo workspace"}
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-semibold text-sidebar-accent-foreground">
+            {currentUser?.org ?? roleMeta?.org ?? "Demo workspace"}
+          </p>
+          {currentUser && (
+            <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+              {currentUser.role}
+            </span>
+          )}
+        </div>
         <p className="mt-1 text-[11px] leading-relaxed text-sidebar-foreground/70">
-          Prepare what is needed. Rescue what remains.
+          Signed in as {currentUser?.name ?? roleMeta?.demoUser ?? "Guest"}
         </p>
+        <div className="mt-2 flex items-center justify-between border-t border-sidebar-border/60 pt-2 text-[11px]">
+          <Link
+            to="/login"
+            onClick={onNavigate}
+            className="text-primary hover:underline font-medium"
+          >
+            Switch Account
+          </Link>
+          <Link
+            to="/signup"
+            onClick={onNavigate}
+            className="text-sidebar-foreground/70 hover:text-sidebar-foreground"
+          >
+            Sign Up
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -203,8 +226,21 @@ export function AppShell({
                 </SelectContent>
               </Select>
               <Button
+                variant="outline"
+                size="sm"
+                className="hidden sm:inline-flex text-xs"
+                onClick={() => {
+                  logout();
+                  toast.success("Logged out successfully");
+                  navigate({ to: "/login" });
+                }}
+              >
+                <LogOut className="mr-1.5 size-3.5" /> Log Out
+              </Button>
+              <Button
                 variant="ghost"
                 size="icon"
+                className="sm:hidden"
                 aria-label="Log out"
                 onClick={() => {
                   logout();

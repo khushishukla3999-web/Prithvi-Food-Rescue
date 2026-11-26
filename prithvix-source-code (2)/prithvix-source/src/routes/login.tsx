@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   ArrowRight,
   HeartHandshake,
@@ -63,8 +63,20 @@ const ICONS: Record<RoleId, React.ElementType> = {
 function LoginPage() {
   const { currentUser, role, login, signup, loginAsDemoRole, logout } = useDemo();
   const navigate = useNavigate();
+  const searchStr = useRouterState({ select: (s) => s.location.searchStr });
+  const tabParam = React.useMemo(() => {
+    return new URLSearchParams(searchStr).get("tab");
+  }, [searchStr]);
 
-  const [activeTab, setActiveTab] = React.useState<string>("login");
+  const [activeTab, setActiveTab] = React.useState<string>(
+    tabParam === "signup" ? "signup" : tabParam === "demo" ? "demo" : "login",
+  );
+
+  React.useEffect(() => {
+    if (tabParam === "signup" || tabParam === "demo" || tabParam === "login") {
+      setActiveTab(tabParam);
+    }
+  }, [tabParam]);
 
   // Login form state
   const [loginEmail, setLoginEmail] = React.useState("");
@@ -257,6 +269,13 @@ function LoginPage() {
                     <Button type="submit" className="w-full" disabled={isLoggingIn}>
                       {isLoggingIn ? "Signing in..." : "Log In"} <ArrowRight className="size-4" />
                     </Button>
+
+                    <div className="pt-2 text-center text-xs text-muted-foreground">
+                      Don't have an account?{" "}
+                      <Link to="/signup" className="font-semibold text-primary hover:underline">
+                        Sign up here
+                      </Link>
+                    </div>
                   </form>
 
                   <div className="mt-6 border-t border-border pt-4">

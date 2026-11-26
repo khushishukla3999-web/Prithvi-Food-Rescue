@@ -19,6 +19,7 @@ import { Route as PredictionRouteImport } from './routes/prediction'
 import { Route as ProviderRouteImport } from './routes/provider'
 import { Route as RecipientRouteImport } from './routes/recipient'
 import { Route as RecommendationRouteImport } from './routes/recommendation'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SurplusRouteImport } from './routes/surplus'
 import { Route as TrackingRouteImport } from './routes/tracking'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
@@ -73,6 +74,11 @@ const RecommendationRoute = RecommendationRouteImport.update({
   path: '/recommendation',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SurplusRoute = SurplusRouteImport.update({
   id: '/surplus',
   path: '/surplus',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/provider': typeof ProviderRoute
   '/recipient': typeof RecipientRoute
   '/recommendation': typeof RecommendationRoute
+  '/signup': typeof SignupRoute
   '/surplus': typeof SurplusRoute
   '/tracking': typeof TrackingRoute
   '/volunteer': typeof VolunteerRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/provider': typeof ProviderRoute
   '/recipient': typeof RecipientRoute
   '/recommendation': typeof RecommendationRoute
+  '/signup': typeof SignupRoute
   '/surplus': typeof SurplusRoute
   '/tracking': typeof TrackingRoute
   '/volunteer': typeof VolunteerRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   '/provider': typeof ProviderRoute
   '/recipient': typeof RecipientRoute
   '/recommendation': typeof RecommendationRoute
+  '/signup': typeof SignupRoute
   '/surplus': typeof SurplusRoute
   '/tracking': typeof TrackingRoute
   '/volunteer': typeof VolunteerRoute
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
     | '/provider'
     | '/recipient'
     | '/recommendation'
+    | '/signup'
     | '/surplus'
     | '/tracking'
     | '/volunteer'
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
     | '/provider'
     | '/recipient'
     | '/recommendation'
+    | '/signup'
     | '/surplus'
     | '/tracking'
     | '/volunteer'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
     | '/provider'
     | '/recipient'
     | '/recommendation'
+    | '/signup'
     | '/surplus'
     | '/tracking'
     | '/volunteer'
@@ -194,6 +206,7 @@ export interface RootRouteChildren {
   ProviderRoute: typeof ProviderRoute
   RecipientRoute: typeof RecipientRoute
   RecommendationRoute: typeof RecommendationRoute
+  SignupRoute: typeof SignupRoute
   SurplusRoute: typeof SurplusRoute
   TrackingRoute: typeof TrackingRoute
   VolunteerRoute: typeof VolunteerRoute
@@ -271,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecommendationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/surplus': {
       id: '/surplus'
       path: '/surplus'
@@ -306,6 +326,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProviderRoute: ProviderRoute,
   RecipientRoute: RecipientRoute,
   RecommendationRoute: RecommendationRoute,
+  SignupRoute: SignupRoute,
   SurplusRoute: SurplusRoute,
   TrackingRoute: TrackingRoute,
   VolunteerRoute: VolunteerRoute,

@@ -5,11 +5,14 @@ import {
   HandHeart,
   HeartHandshake,
   Leaf,
+  LogOut,
   PackageSearch,
   Route as RouteIcon,
   Sparkles,
   Truck,
+  UserPlus,
 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DemoBadge, Logo } from "@/components/prithvix/brand";
@@ -83,7 +86,7 @@ const STEPS = [
 ];
 
 function Landing() {
-  const { currentUser, role } = useDemo();
+  const { currentUser, role, logout } = useDemo();
   const currentDashboard = role
     ? (ROLES.find((r) => r.id === role)?.home ?? "/provider")
     : "/provider";
@@ -100,22 +103,35 @@ function Landing() {
               </Link>
             </Button>
             {currentUser || role ? (
-              <Button asChild>
-                <Link to={currentDashboard}>
-                  Dashboard <ArrowRight className="size-4" />
-                </Link>
-              </Button>
-            ) : (
-              <>
-                <Button asChild variant="ghost" className="hidden sm:inline-flex">
-                  <Link to="/login">Login</Link>
-                </Button>
-                <Button asChild>
-                  <Link to="/login">
-                    Get Started <ArrowRight className="size-4" />
+              <div className="flex items-center gap-2">
+                <Button asChild size="sm">
+                  <Link to={currentDashboard}>
+                    Dashboard <ArrowRight className="size-3.5 ml-1" />
                   </Link>
                 </Button>
-              </>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    logout();
+                    toast.success("Logged out successfully");
+                  }}
+                  className="text-xs text-muted-foreground hover:text-foreground"
+                >
+                  <LogOut className="mr-1.5 size-3.5" /> Log Out
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button asChild variant="ghost" size="sm">
+                  <Link to="/login">Log In</Link>
+                </Button>
+                <Button asChild size="sm">
+                  <Link to="/signup">
+                    <UserPlus className="mr-1.5 size-3.5" /> Sign Up
+                  </Link>
+                </Button>
+              </div>
             )}
           </div>
         </div>
@@ -136,17 +152,36 @@ function Landing() {
             </p>
             <p className="mt-4 font-display text-lg font-medium text-primary">“{BRAND.message}”</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg">
-                <Link to={currentUser || role ? currentDashboard : "/login"}>
-                  {currentUser || role ? "Go to Dashboard" : "Enter the demo"}{" "}
-                  <ArrowRight className="size-4" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link to="/donate">
-                  <HeartHandshake className="mr-2 size-4 text-primary" /> Donate Food
-                </Link>
-              </Button>
+              {currentUser || role ? (
+                <>
+                  <Button asChild size="lg">
+                    <Link to={currentDashboard}>
+                      Go to Dashboard <ArrowRight className="size-4 ml-1" />
+                    </Link>
+                  </Button>
+                  <Button asChild size="lg" variant="outline">
+                    <Link to="/donate">
+                      <HeartHandshake className="mr-2 size-4 text-primary" /> Donate Food
+                    </Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button asChild size="lg">
+                    <Link to="/signup">
+                      <UserPlus className="mr-2 size-4" /> Sign Up Free
+                    </Link>
+                  </Button>
+                  <Button asChild size="lg" variant="outline">
+                    <Link to="/login">Log In / 1-Click Demo</Link>
+                  </Button>
+                  <Button asChild size="lg" variant="ghost">
+                    <Link to="/donate">
+                      <HeartHandshake className="mr-2 size-4 text-primary" /> Donate Food
+                    </Link>
+                  </Button>
+                </>
+              )}
             </div>
             <p className="mt-4 text-xs text-muted-foreground">
               Sign up or test with one-click demo accounts. All operations are safe and client-side.
