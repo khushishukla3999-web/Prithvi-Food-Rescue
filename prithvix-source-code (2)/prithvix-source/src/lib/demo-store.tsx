@@ -309,6 +309,7 @@ type Ctx = {
     input: NewDonationInput,
   ) => Promise<{ success: boolean; error?: string; donation?: DonationItem }>;
   requestDonation: (id: string) => void;
+  deleteDonation: (id: string) => void;
   requests: FoodClaimRequest[];
   activeRequestId: string | null;
   setActiveRequestId: (id: string | null) => void;
@@ -687,6 +688,18 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const deleteDonation = React.useCallback((id: string) => {
+    setDonations((prev) => {
+      const next = prev.filter((d) => d.id !== id);
+      try {
+        window.localStorage.setItem("prithvix-donations", JSON.stringify(next));
+      } catch (_e) {
+        // ignore storage error
+      }
+      return next;
+    });
+  }, []);
+
   const claimDonation = React.useCallback(
     async (
       donationId: string,
@@ -782,9 +795,12 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
 
   const updateRequestStatus = React.useCallback(
     async (requestId: string, status: FoodClaimRequest["status"], stage?: number) => {
+      let affectedDonationId: string | undefined;
+
       setRequests((prev) => {
         const next = prev.map((r) => {
           if (r.id !== requestId) return r;
+          affectedDonationId = r.donationId;
           const nextStage = stage !== undefined ? stage : Math.min(5, r.trackingStage + 1);
           return {
             ...r,
@@ -800,6 +816,29 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
         }
         return next;
       });
+
+      if (affectedDonationId) {
+        setDonations((prev) => {
+          const nextDonations = prev.map((d) => {
+            if (d.id !== affectedDonationId) return d;
+            let nextStatus: DonationItem["status"] = d.status;
+            if (status === "Cancelled") {
+              nextStatus = "Available";
+            } else if (status === "Delivered") {
+              nextStatus = "Collected";
+            } else if (status === "Approved" || status === "In transit" || status === "Requested") {
+              nextStatus = "Requested";
+            }
+            return { ...d, status: nextStatus };
+          });
+          try {
+            window.localStorage.setItem("prithvix-donations", JSON.stringify(nextDonations));
+          } catch (_e) {
+            // ignore storage error
+          }
+          return nextDonations;
+        });
+      }
 
       const backendUrl =
         typeof import.meta !== "undefined" && import.meta.env
@@ -868,6 +907,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     donations,
     addDonation,
     requestDonation,
+    deleteDonation,
     requests,
     activeRequestId,
     setActiveRequestId,
